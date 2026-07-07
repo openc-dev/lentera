@@ -42,13 +42,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             </div>
           )}
           {as === "select" ? (
-            <select ref={ref as any} className={baseStyles} {...props as any}>
+            <select ref={ref as unknown as React.RefObject<HTMLSelectElement>} className={baseStyles} {...props}>
               {children}
             </select>
           ) : as === "textarea" ? (
-            <textarea ref={ref as any} className={baseStyles} {...props as any} />
+            <textarea ref={ref as unknown as React.RefObject<HTMLTextAreaElement>} className={baseStyles} {...props} />
           ) : (
-            <input ref={ref} className={baseStyles} {...props} />
+            <input ref={ref as unknown as React.RefObject<HTMLInputElement>} className={baseStyles} {...props} />
           )}
         </div>
         {error && <p className="text-xs text-red-400 mt-1">{error}</p>}

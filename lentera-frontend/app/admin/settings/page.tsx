@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useToast } from '@/components/ui/Toast';
-import api from '@/lib/api';
+import api, { getApiErrorMessage, isUnauthorizedError } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
@@ -18,6 +18,29 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [sudoPassword, setSudoPassword] = useState('');
   const [showSudoModal, setShowSudoModal] = useState(false);
+
+  // Fetch settings from backend on mount
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await api.get<{ qr_interval: number; form_interval: number }>('/admin/settings');
+        setQrInterval(res.data.qr_interval);
+        setFormInterval(res.data.form_interval);
+        // Save to localStorage for offline fallback
+        localStorage.setItem('settings', JSON.stringify(res.data));
+      } catch {
+        // If fail to fetch from server, try to get from localStorage
+        const saved = localStorage.getItem('settings');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          setQrInterval(parsed.qr_interval);
+          setFormInterval(parsed.form_interval);
+        }
+        // Silently fail for now; we'll rely on defaults if nothing else
+      }
+    };
+    fetchSettings();
+  }, []);
 
   const handleSave = () => {
     setShowSudoModal(true);
@@ -39,13 +62,13 @@ export default function SettingsPage() {
       setShowSudoModal(false);
       setSudoPassword('');
       delete api.defaults.headers.common['X-Sudo-Token'];
-    } catch (err: any) {
-      if (err.response?.status === 401) {
+    } catch (err: unknown) {
+      if (isUnauthorizedError(err)) {
         toast.error("Sesi habis, silakan login ulang.");
         localStorage.removeItem('token');
         router.push('/');
       } else {
-        toast.error(err.response?.data?.message || "Password salah!");
+        toast.error(getApiErrorMessage(err, "Password salah!"));
       }
     } finally {
       setSaving(false);

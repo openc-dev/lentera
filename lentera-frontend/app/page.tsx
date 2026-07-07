@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/Toast';
-import api from '@/lib/api';
+import api, { getApiErrorMessage } from '@/lib/api';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Card from '@/components/ui/Card';
@@ -24,8 +24,8 @@ export default function Home() {
       localStorage.setItem('token', res.data.token);
       toast.success('Login berhasil! Selamat datang.');
       router.push('/admin/dashboard');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Login gagal, coba lagi.');
+    } catch (err: unknown) {
+      toast.error(getApiErrorMessage(err, 'Login gagal, coba lagi.'));
     } finally {
       setLoading(false);
     }

@@ -7,36 +7,69 @@ import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+import { Asset, Category } from '@/lib/types';
+import { isApiStatus } from '@/lib/api';
+
+interface ScanData {
+  category: string;
+  name: string;
+  code: string;
+  status: 'available' | 'borrowed' | 'maintenance';
+  borrower?: {
+    name: string;
+    class?: string;
+    subject?: string;
+    borrowed_at: string;
+  };
+}
 
 function CekAlatContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const urlCode = searchParams.get('code');
 
-  const [inputCode, setInputCode] = useState('');
-  const [scanData, setScanData] = useState<any>(null);
+  const [inputCode, setInputCode] = useState(urlCode ? urlCode.toUpperCase() : '');
+  const [scanData, setScanData] = useState<ScanData | null>(null);
   const [scanLoading, setScanLoading] = useState(false);
   const [scanError, setScanError] = useState('');
 
-  const [assets, setAssets] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCat, setSelectedCat] = useState<number | null>(null);
   const [tableLoading, setTableLoading] = useState(true);
 
   useEffect(() => {
     if (urlCode) {
-      setInputCode(urlCode);
-      fetchScanData(urlCode);
+      const fetchData = async () => {
+        setScanLoading(true);
+        setScanError('');
+        setScanData(null);
+
+        try {
+          const res = await api.get(`/assets/scan/${urlCode}`);
+          setScanData(res.data.data);
+        } catch (err: unknown) {
+          if (isApiStatus(err, 404)) setScanError('Alat tidak ditemukan di sistem Lentera.');
+          else setScanError('Gagal terhubung ke server.');
+        } finally {
+          setScanLoading(false);
+        }
+      };
+
+      fetchData();
     }
   }, [urlCode]);
 
   useEffect(() => {
     const fetchCatalog = async () => {
       try {
-        const [resAssets, resCats] = await Promise.all([api.get('/assets'), api.get('/categories')]);
+        const [resAssets, resCats] = await Promise.all([
+          api.get<{ data: Asset[] }>('/assets'),
+          api.get<{ data: Category[] }>('/categories')
+        ]);
         setAssets(resAssets.data.data);
         setCategories(resCats.data.data);
-      } catch (err) {
+      } catch (err: unknown) {
         console.error("Gagal memuat katalog", err);
       } finally {
         setTableLoading(false);
@@ -45,6 +78,29 @@ function CekAlatContent() {
     fetchCatalog();
   }, []);
 
+  const handleManualSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push(`/cek-alat?code=${inputCode}`);
+    const search = async () => {
+      setScanLoading(true);
+      setScanError('');
+      setScanData(null);
+
+      try {
+        const res = await api.get(`/assets/scan/${inputCode}`);
+        setScanData(res.data.data);
+      } catch (err: unknown) {
+        if (isApiStatus(err, 404)) setScanError('Alat tidak ditemukan di sistem Lentera.');
+        else setScanError('Gagal terhubung ke server.');
+      } finally {
+        setScanLoading(false);
+      }
+    };
+
+    search();
+  };
+
+  // Keep the fetchScanData function for use in the table onClick handler
   const fetchScanData = async (codeToSearch: string) => {
     if (!codeToSearch) return;
     setScanLoading(true);
@@ -54,18 +110,12 @@ function CekAlatContent() {
     try {
       const res = await api.get(`/assets/scan/${codeToSearch}`);
       setScanData(res.data.data);
-    } catch (err: any) {
-      if (err.response?.status === 404) setScanError('Alat tidak ditemukan di sistem Lentera.');
+    } catch (err: unknown) {
+      if (isApiStatus(err, 404)) setScanError('Alat tidak ditemukan di sistem Lentera.');
       else setScanError('Gagal terhubung ke server.');
     } finally {
       setScanLoading(false);
     }
-  };
-
-  const handleManualSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    router.push(`/cek-alat?code=${inputCode}`);
-    fetchScanData(inputCode);
   };
 
   const statusBadge = (status: string) => {

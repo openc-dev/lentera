@@ -7,11 +7,12 @@ import { useRouter } from 'next/navigation';
 import { QRCodeCanvas } from 'qrcode.react';
 import Button from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
+import { Asset } from '@/lib/types';
 
 export default function PrintLabelsPage() {
   const router = useRouter();
   const toast = useToast();
-  const [assets, setAssets] = useState<any[]>([]);
+  const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -27,7 +28,7 @@ export default function PrintLabelsPage() {
       }
     };
     fetchAssets();
-  }, []);
+  }, [toast]);
 
   const handlePrint = () => {
     window.print();
@@ -77,7 +78,7 @@ export default function PrintLabelsPage() {
 
         <div ref={printRef} className="print-p-0 print-m-0 flex-1 overflow-y-auto pr-2 pb-10 print:overflow-visible print:pb-0 relative z-10">
           <div className="print-hidden mb-6">
-            <p className="text-sm text-slate-500">Menampilkan {assets.length} label QR. Klik "Print Labels" untuk mencetak.</p>
+            <p className="text-sm text-slate-500">Menampilkan {assets.length} label QR. Klik &apos;Print Labels&apos; untuk mencetak.</p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 print-grid-cols-3 gap-4 print-gap-2">

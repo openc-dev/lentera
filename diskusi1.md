@@ -30,7 +30,7 @@ Ini alur kerjanya yang sangat gampang di-generate oleh AI:
 1.  Layar monitor admin (Next.js) memanggil API `/api/room-token` tadi.
 2.  Layar admin akan mengubah token `abC123XyZ` menjadi QR Code yang mengarah ke link: `https://aplikasimu.com/borrow?token=abC123XyZ`.
 3.  Di Next.js, kamu pasang *timer* (`setInterval`). Setiap 3 menit, halaman admin akan me-refresh token ke API, dan QR Code di layar akan berubah bentuk.
-
+z
 **Saat Mahasiswa Nge-scan:**
 1.  Mahasiswa nge-scan QR di layar admin pakai HP.
 2.  HP mahasiswa membuka Next.js form peminjaman yang mengirimkan `token` ke Backend.

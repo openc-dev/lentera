@@ -1,0 +1,138 @@
+\documentclass[12pt,a4paper,oneside]{book}
+
+% --- Font: Times New Roman (Nimbus Serif) ---
+\usepackage[T1]{fontenc}
+\pdfmapfile{+nimbus15.map}
+\renewcommand{\rmdefault}{NimbusSerif}
+\renewcommand{\familydefault}{\rmdefault}
+\usepackage[margin=2.5cm,top=3cm,bottom=3cm]{geometry}
+\usepackage{setspace}
+\usepackage{calc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{indentfirst}
+\usepackage{caption}
+\renewcommand{\figurename}{Gambar}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{changepage}
+
+% --- Pandoc fixes ---
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% --- Page Style ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small LENTERA - Sistem Peminjaman Aset Laboratorium}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyfoot{}
+
+% --- Chapter naming: "BAB" instead of "Chapter" ---
+\renewcommand{\chaptername}{BAB}
+\renewcommand{\thechapter}{\Roman{chapter}}
+\renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
+\renewcommand{\thesubsection}{\arabic{chapter}.\arabic{section}.\arabic{subsection}}
+
+% --- Chapter Format: 14pt bold centered ---
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\centering\fontsize{14}{18}\selectfont}
+  {\chaptername\ \thechapter}{10pt}{\fontsize{14}{18}\selectfont}
+\titlespacing*{\chapter}{0pt}{10pt}{20pt}
+
+% --- TOC: show "BAB 1" prefix for chapters ---
+\renewcommand{\cftchappresnum}{BAB }
+\renewcommand{\cftchapnumwidth}{5em}
+
+\titleformat{\section}
+  {\normalfont\bfseries\normalsize}{\thesection}{0.5em}{}
+  
+\titleformat{\subsection}
+  {\normalfont\bfseries\normalsize}{\thesubsection}{0.5em}{}
+
+% --- Spacing ---
+\onehalfspacing
+\setlength{\parindent}{1.5cm}
+
+% --- Table of Contents ---
+\renewcommand{\contentsname}{DAFTAR ISI}
+\renewcommand{\cftchapfont}{\bfseries}
+\renewcommand{\cftchappagefont}{\bfseries}
+\setlength{\cftbeforechapskip}{5pt}
+% Suppress tocloft's heading; we add it manually in the document body
+\makeatletter
+\renewcommand{\@cftmaketoctitle}{%
+  \@cftpagestyle
+  \@afterheading}
+\makeatother
+
+% --- Table spacing ---
+\renewcommand{\arraystretch}{1.5}
+\setlength{\tabcolsep}{8pt}
+
+% --- Code Listings ---
+\lstset{
+  basicstyle=\footnotesize\ttfamily,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  tabsize=2,
+  captionpos=b,
+  backgroundcolor=\color{lightgray!10},
+  frame=single,
+  rulecolor=\color{lightgray},
+}
+
+% --- Hyperlinks ---
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  citecolor=black,
+}
+
+% --- No page number on chapter starts ---
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyhead[L]{\small LENTERA - Sistem Peminjaman Aset Laboratorium}
+  \fancyhead[R]{\thepage}
+  \renewcommand{\headrulewidth}{0.4pt}
+}
+
+\begin{document}
+
+% --- Roman numbering for front matter ---
+\frontmatter
+\pagenumbering{roman}
+
+$for(include-before)$
+$include-before$
+$endfor$
+
+% --- Table of Contents ---
+\vspace*{10pt}
+\begin{center}
+\bfseries\fontsize{14}{18}\selectfont DAFTAR ISI
+\end{center}
+\vspace{10pt}
+\tableofcontents
+\cleardoublepage
+
+% --- Main content ---
+\mainmatter
+\pagenumbering{arabic}
+
+$body$
+
+\end{document}
