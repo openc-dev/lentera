@@ -15,6 +15,17 @@ import Skeleton from '@/components/ui/Skeleton';
 import { QRCodeCanvas } from 'qrcode.react';
 import { Asset, Category, PendingAction, CategoryModalData, AssetModalData, QrModalData } from '@/lib/types';
 
+function formatWIB(iso: string): string {
+  const d = new Date(iso);
+  const dateStr = d.toLocaleDateString('id-ID', {
+    timeZone: 'Asia/Jakarta', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
+  const timeStr = d.toLocaleTimeString('id-ID', {
+    timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', hour12: false
+  });
+  return `${dateStr}, ${timeStr} WIB`;
+}
+
 export default function AdminDashboard() {
   const router = useRouter();
   const toast = useToast();
@@ -484,7 +495,7 @@ export default function AdminDashboard() {
                           {(() => {
                             const txn = getTxn(asset);
                             return asset.status === 'borrowed' && txn ? (
-                              <div><div className="text-sm font-semibold">{txn.student_name}</div><div className="text-xs text-slate-500 font-mono">{txn.borrowed_at}</div></div>
+                              <div><div className="text-sm font-semibold">{txn.student_name}</div><div className="text-xs text-slate-500">{formatWIB(txn.borrowed_at)}</div></div>
                             ) : (
                               <span className="text-slate-600 text-sm italic">-</span>
                             );

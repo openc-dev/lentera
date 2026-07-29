@@ -185,6 +185,7 @@ function BorrowFormContent() {
                 value={formData.return_time}
                 onChange={handleChange}
                 required
+                step="60"
               />
             </div>
           </div>

@@ -17,12 +17,30 @@ interface TransactionData {
   borrowed_at: string;
 }
 
+interface CategoryData {
+  id: number;
+  name: string;
+}
+
 interface ScanData {
-  category: string;
+  category: string | CategoryData;
   name: string;
   code: string;
   status: 'available' | 'borrowed' | 'maintenance';
   lastTransaction?: TransactionData | null;
+}
+
+const catName = (cat: string | CategoryData) => typeof cat === 'string' ? cat : cat.name;
+
+function formatWIB(iso: string): string {
+  const d = new Date(iso);
+  const dateStr = d.toLocaleDateString('id-ID', {
+    timeZone: 'Asia/Jakarta', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
+  const timeStr = d.toLocaleTimeString('id-ID', {
+    timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', hour12: false
+  });
+  return `${dateStr}, ${timeStr} WIB`;
 }
 
 function CekAlatContent() {
@@ -167,7 +185,7 @@ function CekAlatContent() {
               <div className="p-5 bg-slate-800/50 border-b border-[var(--card-border)]">
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0 flex-1">
-                    <div className="text-xs font-bold text-[var(--accent-secondary)] tracking-widest uppercase truncate">{scanData.category}</div>
+                    <div className="text-xs font-bold text-[var(--accent-secondary)] tracking-widest uppercase truncate">{catName(scanData.category)}</div>
                     <h2 className="text-lg font-black mt-1 truncate">{scanData.name}</h2>
                   </div>
                   <span className="inline-block font-mono text-xs tracking-widest px-3 py-1 rounded-full bg-slate-700/80 text-slate-300 shrink-0">{scanData.code}</span>
@@ -182,7 +200,7 @@ function CekAlatContent() {
                       <div className="flex justify-between"><span className="text-slate-500">Nama</span><span className="font-semibold">{scanData.lastTransaction.student_name}</span></div>
                       <div className="flex justify-between"><span className="text-slate-500">Kelas</span><span className="font-semibold">{scanData.lastTransaction.student_class}</span></div>
                       <div className="flex justify-between"><span className="text-slate-500">Matkul</span><span className="font-semibold">{scanData.lastTransaction.subject}</span></div>
-                      <div className="flex justify-between pt-2 border-t border-amber-500/20 mt-2"><span className="text-slate-500 text-xs">Sejak</span><span className="font-semibold text-xs font-mono">{scanData.lastTransaction.borrowed_at}</span></div>
+                      <div className="flex justify-between pt-2 border-t border-amber-500/20 mt-2"><span className="text-slate-500 text-xs">Sejak</span><span className="font-semibold text-xs">{formatWIB(scanData.lastTransaction.borrowed_at)}</span></div>
                     </div>
                   </div>
                 )}
