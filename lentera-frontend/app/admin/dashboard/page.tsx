@@ -551,12 +551,12 @@ export default function AdminDashboard() {
           <div className="space-y-4 mb-6">
             <div>
               <label className="block text-sm font-semibold text-slate-300 mb-1.5">Interval Refresh Barcode (Menit)</label>
-              <Input type="number" min="1" value={settingsModal.qr_interval} onChange={(e) => setSettingsModal({...settingsModal, qr_interval: Number(e.target.value)})} />
+              <Input type="number" min="1" value={settingsModal.qr_interval} onChange={(e) => { if (e.target.value === '') return; setSettingsModal({...settingsModal, qr_interval: Number(e.target.value)}) }} />
               <p className="text-xs text-slate-500 mt-1">Siklus perubahan gambar barcode di layar Monitor Kiosk.</p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-slate-300 mb-1.5">Durasi Isi Form Peminjaman (Menit)</label>
-              <Input type="number" min="1" value={settingsModal.form_interval} onChange={(e) => setSettingsModal({...settingsModal, form_interval: Number(e.target.value)})} />
+              <Input type="number" min="1" value={settingsModal.form_interval} onChange={(e) => { if (e.target.value === '') return; setSettingsModal({...settingsModal, form_interval: Number(e.target.value)}) }} />
               <p className="text-xs text-slate-500 mt-1">Lama waktu token akses mahasiswa berlaku sebelum kadaluarsa.</p>
             </div>
           </div>

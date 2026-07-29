@@ -30,8 +30,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ status: 'error', message: 'Token tidak valid atau kadaluarsa' }, { status: 401 });
   }
 
-  await supabase.from('settings').update({ value: JSON.stringify({ token: '', expires_at: 0 }) }).eq('key', 'gateway_token');
-
   return NextResponse.json({
     status: 'success',
     data: { submission_token: token },

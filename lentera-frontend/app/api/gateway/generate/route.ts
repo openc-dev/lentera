@@ -11,7 +11,15 @@ function getSupabase() {
 export async function GET() {
   const supabase = getSupabase();
   const qrToken = Math.random().toString(36).substring(2, 12);
-  const expiresAt = Date.now() + 15 * 60 * 1000;
+
+  const { data: settingsData } = await supabase
+    .from('settings')
+    .select('value')
+    .eq('key', 'form_interval')
+    .single();
+
+  const formInterval = settingsData ? Number(JSON.parse(settingsData.value)) : 15;
+  const expiresAt = Date.now() + formInterval * 60 * 1000;
 
   await supabase.from('settings').upsert(
     { key: 'gateway_token', value: JSON.stringify({ token: qrToken, expires_at: expiresAt }) },

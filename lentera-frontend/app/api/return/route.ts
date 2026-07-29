@@ -11,9 +11,9 @@ function getSupabase() {
 export async function POST(request: Request) {
   const supabase = getSupabase();
   const body = await request.json();
-  const { asset_id, student_name, submission_token } = body;
+  const { asset_code, student_npm, submission_token } = body;
 
-  if (!asset_id || !student_name) {
+  if (!asset_code || !student_npm) {
     return NextResponse.json({ status: 'error', message: 'Data tidak lengkap' }, { status: 400 });
   }
 
@@ -32,11 +32,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ status: 'error', message: 'Token tidak valid' }, { status: 401 });
   }
 
+  const { data: asset } = await supabase
+    .from('assets')
+    .select('id')
+    .eq('code', asset_code)
+    .single();
+
+  if (!asset) {
+    return NextResponse.json({ status: 'error', message: 'Alat tidak ditemukan' }, { status: 404 });
+  }
+
   const { data: txn } = await supabase
     .from('transactions')
     .select('id')
-    .eq('asset_id', Number(asset_id))
-    .eq('student_name', student_name)
+    .eq('asset_id', asset.id)
+    .eq('student_npm', student_npm)
     .is('returned_at', null)
     .single();
 
@@ -58,7 +68,9 @@ export async function POST(request: Request) {
   await supabase
     .from('assets')
     .update({ status: 'available', updated_at: new Date().toISOString() })
-    .eq('id', asset_id);
+    .eq('id', asset.id);
+
+  await supabase.from('settings').update({ value: JSON.stringify({ token: '', expires_at: 0 }) }).eq('key', 'gateway_token');
 
   return NextResponse.json({ status: 'success', data: transaction });
 }

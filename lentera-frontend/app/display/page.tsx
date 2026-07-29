@@ -12,6 +12,13 @@ export default function DisplayQR() {
   const [qrToken, setQrToken] = useState('');
   const [expiresAt, setExpiresAt] = useState('');
   const [error, setError] = useState('');
+  const [qrInterval, setQrInterval] = useState(1);
+
+  useEffect(() => {
+    api.get('/admin/settings').then(res => {
+      if (res.data.qr_interval) setQrInterval(res.data.qr_interval);
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,9 +37,9 @@ export default function DisplayQR() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 60000);
+    const interval = setInterval(fetchData, qrInterval * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [qrInterval]);
 
   if (error) {
     return (
