@@ -34,8 +34,11 @@ export default function DisplayQR() {
     return () => clearInterval(interval);
   }, []);
 
-  const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || (typeof window !== 'undefined' ? window.location.origin : '');
-  const scanUrl = frontendUrl ? `${frontendUrl}/scan?token=${qrToken}` : '';
+  const [scanUrl, setScanUrl] = useState('');
+  
+  useEffect(() => {
+    setScanUrl(`${window.location.origin}/scan?token=${qrToken}`);
+  }, [qrToken]);
 
   if (error) {
     return (
