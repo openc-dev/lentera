@@ -29,10 +29,13 @@ export async function GET(_request: Request, { params }: { params: Promise<{ cod
     .is('returned_at', null)
     .order('borrowed_at', { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
 
   return NextResponse.json({
     status: 'success',
-    data: { ...data, lastTransaction: transaction || null },
+    data: {
+      ...data,
+      lastTransaction: transaction || null,
+    },
   });
 }

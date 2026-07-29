@@ -10,6 +10,7 @@ function getSupabase() {
 
 export async function GET() {
   const supabase = getSupabase();
+
   const { data: assets, error } = await supabase
     .from('assets')
     .select('*, category:categories(*)')
@@ -19,7 +20,27 @@ export async function GET() {
     return NextResponse.json({ status: 'error', message: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ status: 'success', data: assets || [] });
+  const result = assets || [];
+
+  const borrowedIds = result.filter(a => a.status === 'borrowed').map(a => a.id);
+  if (borrowedIds.length > 0) {
+    const { data: transactions } = await supabase
+      .from('transactions')
+      .select('*')
+      .in('asset_id', borrowedIds)
+      .is('returned_at', null);
+
+    if (transactions) {
+      for (const asset of result) {
+        if (asset.status === 'borrowed') {
+          const txn = transactions.find(t => t.asset_id === asset.id);
+          (asset as Record<string, unknown>).lastTransaction = txn || null;
+        }
+      }
+    }
+  }
+
+  return NextResponse.json({ status: 'success', data: result });
 }
 
 export async function POST(request: Request) {

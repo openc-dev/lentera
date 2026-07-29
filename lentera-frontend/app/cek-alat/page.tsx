@@ -10,17 +10,19 @@ import Input from '@/components/ui/Input';
 import { Asset, Category } from '@/lib/types';
 import { isApiStatus } from '@/lib/api';
 
+interface TransactionData {
+  student_name: string;
+  student_class?: string;
+  subject?: string;
+  borrowed_at: string;
+}
+
 interface ScanData {
   category: string;
   name: string;
   code: string;
   status: 'available' | 'borrowed' | 'maintenance';
-  borrower?: {
-    name: string;
-    class?: string;
-    subject?: string;
-    borrowed_at: string;
-  };
+  lastTransaction?: TransactionData | null;
 }
 
 function CekAlatContent() {
@@ -173,14 +175,14 @@ function CekAlatContent() {
               </div>
               <div className="p-5">
                 <div className="flex justify-center mb-4">{statusBadge(scanData.status)}</div>
-                {scanData.status === 'borrowed' && scanData.borrower && (
+                {scanData.status === 'borrowed' && scanData.lastTransaction && (
                   <div className="p-4 bg-amber-500/5 rounded-xl border border-amber-500/20 text-sm">
                     <h3 className="font-bold text-amber-400 mb-3 border-b border-amber-500/20 pb-2">Sedang Dipinjam Oleh:</h3>
                     <div className="space-y-2">
-                      <div className="flex justify-between"><span className="text-slate-500">Nama</span><span className="font-semibold">{scanData.borrower.name}</span></div>
-                      <div className="flex justify-between"><span className="text-slate-500">Kelas</span><span className="font-semibold">{scanData.borrower.class}</span></div>
-                      <div className="flex justify-between"><span className="text-slate-500">Matkul</span><span className="font-semibold">{scanData.borrower.subject}</span></div>
-                      <div className="flex justify-between pt-2 border-t border-amber-500/20 mt-2"><span className="text-slate-500 text-xs">Sejak</span><span className="font-semibold text-xs font-mono">{scanData.borrower.borrowed_at}</span></div>
+                      <div className="flex justify-between"><span className="text-slate-500">Nama</span><span className="font-semibold">{scanData.lastTransaction.student_name}</span></div>
+                      <div className="flex justify-between"><span className="text-slate-500">Kelas</span><span className="font-semibold">{scanData.lastTransaction.student_class}</span></div>
+                      <div className="flex justify-between"><span className="text-slate-500">Matkul</span><span className="font-semibold">{scanData.lastTransaction.subject}</span></div>
+                      <div className="flex justify-between pt-2 border-t border-amber-500/20 mt-2"><span className="text-slate-500 text-xs">Sejak</span><span className="font-semibold text-xs font-mono">{scanData.lastTransaction.borrowed_at}</span></div>
                     </div>
                   </div>
                 )}
