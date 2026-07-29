@@ -48,6 +48,8 @@ export default function AdminDashboard() {
     return { isOpen: false, ...defaults, ...parsed };
   });
   const [qrModal, setQrModal] = useState<{isOpen: boolean, asset: QrModalData}>({isOpen: false, asset: null});
+  const [confirmModal, setConfirmModal] = useState<'batch-qr' | 'export-csv' | null>(null);
+  const [actionLoading, setActionLoading] = useState(false);
   const qrRef = useRef<HTMLDivElement>(null);
 
   const fetchData = useCallback(async () => {
@@ -260,9 +262,10 @@ export default function AdminDashboard() {
 
   // Feature #7: Batch download all QR codes
   const downloadAllQR = async () => {
+    setActionLoading(true);
     toast.info("Menyiapkan download semua QR code...");
     const containers = qrBatchRef.current?.querySelectorAll('[data-qr-batch]');
-    if (!containers) return;
+    if (!containers) { setActionLoading(false); return; }
     for (const container of Array.from(containers)) {
       const canvas = container.querySelector('canvas');
       if (!canvas) continue;
@@ -277,6 +280,7 @@ export default function AdminDashboard() {
       link.click();
       await new Promise(resolve => setTimeout(resolve, 300));
     }
+    setActionLoading(false);
     toast.success("Semua QR code berhasil di-download!");
   };
 
@@ -292,6 +296,7 @@ export default function AdminDashboard() {
 
   // Feature #15: Export CSV
   const exportCSV = () => {
+    setActionLoading(true);
     const headers = ["Kode", "Nama", "Kategori", "Status", "Peminjam", "Dipinjam Sejak"];
     const rows = filteredAssets.map(a => {
       const txn = getTxn(a);
@@ -310,6 +315,7 @@ export default function AdminDashboard() {
     link.href = URL.createObjectURL(blob);
     link.download = `lentera-assets-${new Date().toISOString().slice(0, 10)}.csv`;
     link.click();
+    setActionLoading(false);
     toast.success("Data aset berhasil di-export!");
   };
 
@@ -446,14 +452,19 @@ export default function AdminDashboard() {
                     <input ref={searchRef} type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Cari alat... (Ctrl+K)" className="w-full pl-10 pr-4 py-2 rounded-xl bg-[var(--card)] border border-[var(--card-border)] text-sm text-[var(--foreground)] placeholder:text-[var(--subtle)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all" />
                   </div>
                   <Button variant="success" size="sm" onClick={() => openAssetForm('add')} className="!shadow-none">+ Tambah</Button>
-                  <Button variant="ghost" size="sm" onClick={downloadAllQR} className="text-xs">Batch QR</Button>
-                  <Button variant="ghost" size="sm" onClick={exportCSV} className="text-xs">Export CSV</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setConfirmModal('batch-qr')} className="text-xs" disabled={actionLoading}>Unduh Semua QR</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setConfirmModal('export-csv')} className="text-xs" disabled={actionLoading}>Ekspor CSV</Button>
                 </div>
+              </div>
+              <div className="px-4 pb-2 text-xs text-slate-500">
+                Menampilkan <span className="font-semibold text-[var(--foreground)]">{filteredAssets.length}</span> dari <span className="font-semibold text-[var(--foreground)]">{assets.length}</span> aset
+                {selectedCat !== null && <> di kategori ini</>}
+                {searchQuery && <> untuk <span className="font-medium text-[var(--accent-secondary)]">"{searchQuery}"</span></>}
               </div>
 
               <div className="h-[750px] overflow-y-auto overflow-x-auto">
                 <table className="w-full text-left border-collapse">
-                  <thead className="border-b border-[var(--card-border)] text-sm text-slate-400">
+                  <thead className="sticky top-0 bg-[var(--card)] border-b border-[var(--card-border)] text-sm text-slate-400">
                     <tr>
                       <th className="p-4 font-semibold">KODE | MERK ALAT</th>
                       <th className="p-4 font-semibold">STATUS</th>
@@ -463,7 +474,12 @@ export default function AdminDashboard() {
                   </thead>
                   <tbody className="divide-y divide-[var(--card-border)]">
                     {filteredAssets.length === 0 && (
-                      <tr><td colSpan={4} className="p-8 text-center text-slate-500">{searchQuery ? `Tidak ada alat yang cocok dengan "${searchQuery}"` : "Tidak ada alat di kategori ini."}</td></tr>
+                      <tr><td colSpan={4} className="p-12 text-center">
+                        <div className="flex flex-col items-center gap-3">
+                          <svg className="w-10 h-10 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
+                          <p className="text-slate-500">{searchQuery ? `Tidak ada alat yang cocok dengan "${searchQuery}"` : "Tidak ada alat di kategori ini."}</p>
+                        </div>
+                      </td></tr>
                     )}
                     {filteredAssets.map(asset => (
                       <tr key={asset.id} className="hover:bg-[var(--overlay)]/50 transition">
@@ -586,6 +602,27 @@ export default function AdminDashboard() {
               </Button>
             </div>
           )}
+        </Modal>
+
+        {/* CONFIRMATION MODAL */}
+        <Modal isOpen={confirmModal !== null} onClose={() => setConfirmModal(null)} title="Konfirmasi" size="sm">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-amber-500/15 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+            </div>
+            <h3 className="text-xl font-bold mb-2">Konfirmasi {confirmModal === 'batch-qr' ? 'Download Semua QR' : 'Ekspor CSV'}</h3>
+            <p className="text-sm text-slate-400 mb-6">
+              {confirmModal === 'batch-qr'
+                ? `Anda akan men-download QR code untuk ${filteredAssets.length} aset yang ditampilkan.`
+                : `Anda akan mengexport data ${filteredAssets.length} aset ke file CSV.`}
+            </p>
+            <div className="flex gap-3">
+              <Button variant="ghost" fullWidth onClick={() => setConfirmModal(null)}>Batal</Button>
+              <Button variant="primary" fullWidth onClick={() => { setConfirmModal(null); if (confirmModal === 'batch-qr') downloadAllQR(); else exportCSV(); }}>
+                Lanjutkan
+              </Button>
+            </div>
+          </div>
         </Modal>
 
         {/* LOGOUT CONFIRMATION MODAL */}
