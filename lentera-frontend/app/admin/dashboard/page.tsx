@@ -120,9 +120,9 @@ export default function AdminDashboard() {
 
       if (pendingAction) {
         await executeAction(pendingAction.type, pendingAction.id, pendingAction.payload);
+      } else {
+        toast.success(res.data.message || "Otorisasi berhasil!");
       }
-
-      toast.success(res.data.message || "Aksi berhasil dieksekusi!");
       setSudoPassword('');
       setShowSudoModal(false);
     } catch (err: unknown) {
@@ -313,7 +313,7 @@ export default function AdminDashboard() {
         a.category?.name || '-',
         a.status,
         txn?.student_name || '-',
-        txn?.borrowed_at || '-'
+        (txn ? formatWIB(txn.borrowed_at) : '-')
       ];
     });
     const csv = [headers, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');

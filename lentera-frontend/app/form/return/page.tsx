@@ -16,7 +16,7 @@ function ReturnFormContent() {
   const submissionToken = searchParams.get('submission_token');
 
   const [options, setOptions] = useState<FormOption[]>([]);
-  const [loadingOptions, setLoadingOptions] = useState(!submissionToken); // true if no token
+  const [loadingOptions, setLoadingOptions] = useState(true);
   const [error, setError] = useState(submissionToken ? '' : 'Akses ditolak. Token sesi tidak ditemukan.');
 
   const [formData, setFormData] = useState({
@@ -52,7 +52,7 @@ function ReturnFormContent() {
 
       await api.post('/return', payload);
       toast.success('Pengembalian berhasil! Terima kasih.');
-      router.push('/');
+      router.push(`/cek-alat?code=${encodeURIComponent(formData.asset_code)}`);
     } catch (err: unknown) {
       toast.error(getApiErrorMessage(err, 'Pengembalian gagal.'));
     }
@@ -93,7 +93,7 @@ function ReturnFormContent() {
           <h1 className="text-2xl font-extrabold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">Form Pengembalian Alat</h1>
         </div>
 
-        {options.length === 0 ? (
+        {options.length === 0 && !loadingOptions ? (
           <div className="text-center p-6 bg-amber-500/5 border border-amber-500/20 rounded-xl">
             <p className="text-amber-400 font-semibold">Tidak ada alat yang sedang dipinjam saat ini.</p>
           </div>
