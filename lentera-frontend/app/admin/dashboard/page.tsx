@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import api, { getApiErrorMessage, isUnauthorizedError, setSudoHeader } from '@/lib/api';
+import api, { setSudoHeader } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/Toast';
 import { useKeyboardShortcuts } from '@/lib/useKeyboardShortcuts';
@@ -13,15 +13,14 @@ import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import Skeleton from '@/components/ui/Skeleton';
 import { QRCodeCanvas } from 'qrcode.react';
-import { Asset, Category, PendingAction, CategoryModalData, AssetModalData, QrModalData } from '@/lib/types';
 
 export default function AdminDashboard() {
   const router = useRouter();
   const toast = useToast();
   const searchRef = useRef<HTMLInputElement>(null);
   const qrBatchRef = useRef<HTMLDivElement>(null);
-  const [assets, setAssets] = useState<Asset[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [assets, setAssets] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [selectedCat, setSelectedCat] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,25 +28,17 @@ export default function AdminDashboard() {
   const [showSudoModal, setShowSudoModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [sudoPassword, setSudoPassword] = useState('');
-  const [sudoExpires, setSudoExpires] = useState<number | null>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('sudoExpires');
-      const val = saved ? parseInt(saved, 10) : null;
-      return val && val > Date.now() ? val : null;
-    }
-    return null;
-  });
-  const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
+  const [pendingAction, setPendingAction] = useState<{type: string, id?: number, payload?: any} | null>(null);
 
-  const [catModal, setCatModal] = useState<{isOpen: boolean, type: 'add'|'edit', data: CategoryModalData}>({isOpen: false, type: 'add', data: {name: ''}});
-  const [assetModal, setAssetModal] = useState<{isOpen: boolean, type: 'add'|'edit', data: AssetModalData}>({isOpen: false, type: 'add', data: {category_id: '', name: '', code: ''}});
+  const [catModal, setCatModal] = useState<{isOpen: boolean, type: 'add'|'edit', data: any}>({isOpen: false, type: 'add', data: {name: ''}});
+  const [assetModal, setAssetModal] = useState<{isOpen: boolean, type: 'add'|'edit', data: any}>({isOpen: false, type: 'add', data: {category_id: '', name: '', code: ''}});
   const [settingsModal, setSettingsModal] = useState<{isOpen: boolean, qr_interval: number, form_interval: number}>(() => {
     const saved = typeof window !== 'undefined' ? localStorage.getItem('settings') : null;
     const defaults = { qr_interval: 30, form_interval: 15 };
     const parsed = saved ? JSON.parse(saved) : defaults;
     return { isOpen: false, ...defaults, ...parsed };
   });
-  const [qrModal, setQrModal] = useState<{isOpen: boolean, asset: QrModalData}>({isOpen: false, asset: null});
+  const [qrModal, setQrModal] = useState<{isOpen: boolean, asset: any}>({isOpen: false, asset: null});
   const qrRef = useRef<HTMLDivElement>(null);
 
   const fetchData = useCallback(async () => {
@@ -55,8 +46,8 @@ export default function AdminDashboard() {
       const [resAssets, resCats] = await Promise.all([api.get('/assets'), api.get('/categories')]);
       setAssets(resAssets.data.data);
       setCategories(resCats.data.data);
-    } catch (err: unknown) {
-      if (isUnauthorizedError(err)) {
+    } catch (err: any) {
+      if (err.response?.status === 401) {
         toast.error("Sesi login telah habis. Silakan login kembali.");
         localStorage.removeItem('token');
         router.push('/');
@@ -68,10 +59,7 @@ export default function AdminDashboard() {
     }
   }, [router, toast]);
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchData();
-  }, [fetchData]);
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   // Feature #10: Auto-refresh dashboard every 30s
   useEffect(() => {
@@ -83,12 +71,9 @@ export default function AdminDashboard() {
     try {
       await api.post('/logout');
     } catch {
-      // Logout from server failed, remove local token
+      console.log("Logout dari server gagal, hapus token lokal.");
     } finally {
       localStorage.removeItem('token');
-      localStorage.removeItem('sudoExpires');
-      localStorage.removeItem('sudoToken');
-      setSudoHeader(null);
       toast.info("Berhasil logout. Sampai jumpa!");
       router.push('/');
     }
@@ -97,75 +82,39 @@ export default function AdminDashboard() {
   const handleVerifySudo = async () => {
     try {
       const res = await api.post('/admin/sudo', { password: sudoPassword });
-      const sudoToken = res.data.sudo_token;
-      const expiresAt = Date.now() + 10 * 60 * 1000; // eslint-disable-line
+      setSudoHeader(res.data.sudo_token);
 
-      setSudoHeader(sudoToken);
-      setSudoExpires(expiresAt);
-      localStorage.setItem('sudoExpires', expiresAt.toString());
-      localStorage.setItem('sudoToken', sudoToken);
+      if (pendingAction?.type === 'DELETE_ASSET') await api.delete(`/assets/${pendingAction.id}`);
+      else if (pendingAction?.type === 'UPDATE_STATUS') await api.put(`/assets/${pendingAction.id}/status`, { status: pendingAction.payload });
+      else if (pendingAction?.type === 'EDIT_ASSET') await api.put(`/assets/${pendingAction.id}`, pendingAction.payload);
+      else if (pendingAction?.type === 'DELETE_CATEGORY') await api.delete(`/categories/${pendingAction.id}`);
+      else if (pendingAction?.type === 'EDIT_CATEGORY') await api.put(`/categories/${pendingAction.id}`, pendingAction.payload);
+      else if (pendingAction?.type === 'UPDATE_SETTINGS') await api.put('/admin/settings', pendingAction.payload);
 
-      if (pendingAction) {
-        await executeAction(pendingAction.type, pendingAction.id, pendingAction.payload);
-      }
-
-      toast.success(res.data.message || "Aksi berhasil dieksekusi!");
+      toast.success("Aksi berhasil dieksekusi!");
       setSudoPassword('');
       setShowSudoModal(false);
-    } catch (err: unknown) {
-      if (isUnauthorizedError(err)) {
+      setSudoHeader(null);
+      fetchData();
+      if (pendingAction?.type === 'DELETE_CATEGORY' && selectedCat === pendingAction.id) setSelectedCat(null);
+    } catch (err: any) {
+      if (err.response?.status === 401) {
         toast.error("Sesi habis, silakan login ulang.");
         localStorage.removeItem('token');
         router.push('/');
       } else {
-        toast.error(getApiErrorMessage(err, "Password Sudo salah!"));
+        toast.error(err.response?.data?.message || "Password Sudo salah!");
       }
     }
   };
 
-  const triggerAction = (type: PendingAction['type'], id?: number, payload?: PendingAction['payload'], currentStatus?: string) => {
+  const triggerAction = (type: string, id?: number, payload?: any, currentStatus?: string) => {
     if (currentStatus === 'borrowed') {
       toast.warning("Alat sedang dipinjam mahasiswa, tidak bisa diubah.");
       return;
     }
-
-    if (sudoExpires && sudoExpires > Date.now()) { // eslint-disable-line
-      const savedToken = localStorage.getItem('sudoToken');
-      if (savedToken) {
-        setSudoHeader(savedToken);
-        executeAction(type, id, payload).finally(() => {
-          setSudoHeader(null);
-          localStorage.removeItem('sudoToken');
-        });
-        return;
-      }
-    }
-
-    setPendingAction({ type, id: id ?? undefined, payload: payload ?? null });
+    setPendingAction({ type, id, payload });
     setShowSudoModal(true);
-  };
-
-  const executeAction = async (type: PendingAction['type'], id?: number, payload?: PendingAction['payload']) => {
-    try {
-      if (type === 'DELETE_ASSET') await api.delete(`/assets/${id}`);
-      else if (type === 'UPDATE_STATUS') await api.put(`/assets/${id}/status`, { status: payload });
-      else if (type === 'EDIT_ASSET') await api.put(`/assets/${id}`, payload);
-      else if (type === 'DELETE_CATEGORY') await api.delete(`/categories/${id}`);
-      else if (type === 'EDIT_CATEGORY') await api.put(`/categories/${id}`, payload);
-      else if (type === 'UPDATE_SETTINGS') await api.put('/admin/settings', payload);
-
-      toast.success("Aksi berhasil dieksekusi!");
-      fetchData();
-      if (type === 'DELETE_CATEGORY' && selectedCat === id) setSelectedCat(null);
-    } catch (err: unknown) {
-      if (isUnauthorizedError(err)) {
-        toast.error("Sesi habis, silakan login ulang.");
-        localStorage.removeItem('token');
-        router.push('/');
-      } else {
-        toast.error(getApiErrorMessage(err, "Gagal mengeksekusi aksi."));
-      }
-    }
   };
 
   const saveCategory = async () => {
@@ -179,16 +128,14 @@ export default function AdminDashboard() {
         toast.success("Kategori berhasil ditambahkan!");
         setCatModal({ ...catModal, isOpen: false });
         fetchData();
-      } catch (err: unknown) {
-        toast.error(getApiErrorMessage(err, "Gagal menambahkan kategori."));
-      }
+      } catch (err: any) { toast.error(err.response?.data?.message || "Gagal menambahkan kategori."); }
     } else {
       triggerAction('EDIT_CATEGORY', catModal.data.id, { name: catModal.data.name });
       setCatModal({ ...catModal, isOpen: false });
     }
   };
 
-  const openAssetForm = (type: 'add' | 'edit', asset: Asset | null = null) => {
+  const openAssetForm = (type: 'add' | 'edit', asset: any = null) => {
     if (type === 'edit' && asset?.status === 'borrowed') {
       toast.warning("Alat sedang dipinjam, tidak bisa diedit.");
       return;
@@ -211,9 +158,7 @@ export default function AdminDashboard() {
         toast.success("Alat berhasil ditambahkan!");
         setAssetModal({ ...assetModal, isOpen: false });
         fetchData();
-      } catch (err: unknown) {
-        toast.error(getApiErrorMessage(err, "Gagal menambahkan alat."));
-      }
+      } catch (err: any) { toast.error(err.response?.data?.message || "Gagal menambahkan alat."); }
     } else {
       triggerAction('EDIT_ASSET', assetModal.data.id, assetModal.data);
       setAssetModal({ ...assetModal, isOpen: false });
@@ -232,7 +177,7 @@ export default function AdminDashboard() {
     setSettingsModal(p => ({ ...p, isOpen: false }));
   };
 
-  const getTxn = (a: Asset) => a.lastTransaction ?? null;
+  const getTxn = (a: any) => a.lastTransaction ?? a.last_transaction ?? null;
 
   const statusBadge = (status: string) => {
     switch (status) {
@@ -265,17 +210,16 @@ export default function AdminDashboard() {
     if (!containers) return;
     for (const container of Array.from(containers)) {
       const canvas = container.querySelector('canvas');
-      if (!canvas) continue;
-      const attribute = container.getAttribute('data-qr-batch');
-      if (attribute === null) continue;
-      const assetId = Number(attribute);
-      const asset = assets.find(a => a.id === assetId);
-      if (!asset) continue;
-      const link = document.createElement('a');
-      link.download = `QR-${asset.code}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      await new Promise(resolve => setTimeout(resolve, 300));
+      if (canvas) {
+        const assetId = container.getAttribute('data-qr-batch');
+        const asset = assets.find(a => a.id == assetId);
+        if (!asset) continue;
+        const link = document.createElement('a');
+        link.download = `QR-${asset.code}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
     }
     toast.success("Semua QR code berhasil di-download!");
   };
@@ -330,17 +274,14 @@ export default function AdminDashboard() {
     return { total, available, borrowed, maintenance };
   }, [assets]);
 
-  const lowercaseSearchQuery = useMemo(() => searchQuery.toLowerCase().trim(), [searchQuery]);
-
-  const filterAssets = useCallback((assets: Asset[], selectedCat: number | null, lowercaseSearchQuery: string) => {
+  const filteredAssets = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
     return assets.filter(a => {
       const matchCat = selectedCat ? a.category_id === selectedCat : true;
-      const matchSearch = !lowercaseSearchQuery || a.code.toLowerCase().includes(lowercaseSearchQuery) || a.name.toLowerCase().includes(lowercaseSearchQuery);
+      const matchSearch = !q || a.code.toLowerCase().includes(q) || a.name.toLowerCase().includes(q);
       return matchCat && matchSearch;
     });
-  }, []);
-
-  const filteredAssets = filterAssets(assets, selectedCat, lowercaseSearchQuery);
+  }, [assets, selectedCat, searchQuery]);
 
   // Feature #13: Keyboard shortcuts
   const shortcuts = useMemo(() => [
@@ -380,10 +321,10 @@ export default function AdminDashboard() {
             <Button variant="success" size="sm" onClick={() => setCatModal({isOpen: true, type: 'add', data: {name: ''}})} className="shrink-0 !px-3 !shadow-none" title="Tambah Kategori">+</Button>
             {selectedCat !== null && (
               <>
-                <Button variant="warning" size="sm" onClick={() => { const cat = categories.find(c => c.id === selectedCat); if (!cat) return; setCatModal({isOpen: true, type: 'edit', data: {id: cat.id, name: cat.name}}); }} className="shrink-0 !px-3 !shadow-none !text-white" title="Edit Kategori">
+                <Button variant="warning" size="sm" onClick={() => { const cat = categories.find(c => c.id === selectedCat); setCatModal({isOpen: true, type: 'edit', data: {id: cat.id, name: cat.name}}); }} className="shrink-0 !px-3 !shadow-none !text-white" title="Edit Kategori">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                 </Button>
-                <Button variant="danger" size="sm" onClick={() => triggerAction('DELETE_CATEGORY', selectedCat, null)} className="shrink-0 !px-3 !shadow-none" title="Hapus Kategori">
+                <Button variant="danger" size="sm" onClick={() => triggerAction('DELETE_CATEGORY', selectedCat)} className="shrink-0 !px-3 !shadow-none" title="Hapus Kategori">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                 </Button>
               </>
@@ -475,14 +416,9 @@ export default function AdminDashboard() {
                         </td>
                         <td className="p-4">{statusBadge(asset.status)}</td>
                         <td className="p-4">
-                          {(() => {
-                            const txn = getTxn(asset);
-                            return asset.status === 'borrowed' && txn ? (
-                              <div><div className="text-sm font-semibold">{txn.student_name}</div><div className="text-xs text-slate-500 font-mono">{txn.borrowed_at}</div></div>
-                            ) : (
-                              <span className="text-slate-600 text-sm italic">-</span>
-                            );
-                          })()}
+                          {asset.status === 'borrowed' && getTxn(asset) ? (
+                            <div><div className="text-sm font-semibold">{getTxn(asset).student_name}</div><div className="text-xs text-slate-500 font-mono">{getTxn(asset).borrowed_at}</div></div>
+                          ) : (<span className="text-slate-600 text-sm italic">-</span>)}
                         </td>
                         <td className="p-4 flex gap-2 justify-center flex-wrap">
                           {asset.status === 'available' ? (<Button variant="ghost" size="sm" onClick={() => triggerAction('UPDATE_STATUS', asset.id, 'maintenance', asset.status)} className="!text-xs">MAINTENANCE</Button>)
@@ -575,13 +511,11 @@ export default function AdminDashboard() {
           {qrModal.asset && (
             <div className="text-center">
               <div ref={qrRef} className="inline-block bg-white p-6 rounded-2xl mb-4">
-                <QRCodeCanvas value={getAssetQRUrl(qrModal.asset!.code)} size={280} level={"H"} includeMargin={true} />
+                <QRCodeCanvas value={getAssetQRUrl(qrModal.asset.code)} size={280} level={"H"} includeMargin={true} />
               </div>
-              <a href={getAssetQRUrl(qrModal.asset!.code)} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-400 hover:text-[var(--accent-secondary)] hover:underline mb-2 font-mono block transition-colors">
-                {getAssetQRUrl(qrModal.asset!.code)}
-              </a>
-              <p className="text-xs text-slate-500 mb-6">Scan QR ini untuk langsung membuka halaman detail alat <span className="font-mono text-[var(--accent-secondary)]">{qrModal.asset!.code}</span></p>
-              <Button variant="primary" size="lg" fullWidth onClick={() => downloadQR(qrModal.asset!.code)}>
+              <p className="text-sm text-slate-400 mb-2 font-mono">{getAssetQRUrl(qrModal.asset.code)}</p>
+              <p className="text-xs text-slate-500 mb-6">Scan QR ini untuk langsung membuka halaman detail alat <span className="font-mono text-[var(--accent-secondary)]">{qrModal.asset.code}</span></p>
+              <Button variant="primary" size="lg" fullWidth onClick={() => downloadQR(qrModal.asset.code)}>
                 <span className="flex items-center justify-center gap-2"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>Download QR sebagai JPG</span>
               </Button>
             </div>

@@ -3,11 +3,10 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/Toast';
-import api, { getApiErrorMessage } from '@/lib/api';
+import api from '@/lib/api';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import { FormOption } from '@/lib/types';
 
 function ReturnFormContent() {
   const searchParams = useSearchParams();
@@ -15,9 +14,9 @@ function ReturnFormContent() {
   const toast = useToast();
   const submissionToken = searchParams.get('submission_token');
 
-  const [options, setOptions] = useState<FormOption[]>([]);
-  const [loadingOptions, setLoadingOptions] = useState(!submissionToken); // true if no token
-  const [error, setError] = useState(submissionToken ? '' : 'Akses ditolak. Token sesi tidak ditemukan.');
+  const [options, setOptions] = useState<any[]>([]);
+  const [loadingOptions, setLoadingOptions] = useState(true);
+  const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
     asset_code: '',
@@ -25,14 +24,18 @@ function ReturnFormContent() {
   });
 
   useEffect(() => {
-    if (!submissionToken) return;
+    if (!submissionToken) {
+      setError('Akses ditolak. Token sesi tidak ditemukan.');
+      setLoadingOptions(false);
+      return;
+    }
 
     const fetchOptions = async () => {
       try {
-        const res = await api.get<{ data: FormOption[] }>(`/assets/form-options?submission_token=${submissionToken}&status=borrowed`);
+        const res = await api.get(`/assets/form-options?submission_token=${submissionToken}&status=borrowed`);
         setOptions(res.data.data);
-      } catch (err: unknown) {
-        setError(getApiErrorMessage(err, 'Gagal mengambil data alat yang sedang dipinjam.'));
+      } catch (err: any) {
+        setError(err.response?.data?.message || 'Gagal mengambil data alat yang sedang dipinjam.');
       } finally {
         setLoadingOptions(false);
       }
@@ -53,8 +56,8 @@ function ReturnFormContent() {
       await api.post('/return', payload);
       toast.success('Pengembalian berhasil! Terima kasih.');
       router.push('/');
-    } catch (err: unknown) {
-      toast.error(getApiErrorMessage(err, 'Pengembalian gagal.'));
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Pengembalian gagal.');
     }
   };
 

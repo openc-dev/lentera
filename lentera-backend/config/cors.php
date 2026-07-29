@@ -20,10 +20,7 @@ return [
     'allowed_methods' => ['*'],
 
     // URL FRONTEND MASUKIN KESINI
-    'allowed_origins' => [
-        env('FRONTEND_URL', 'http://100.121.240.70:3000'),
-        'http://localhost:3000',
-    ],
+    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
 
     'allowed_origins_patterns' => [],
 

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/Toast';
-import api, { getApiErrorMessage } from '@/lib/api';
+import api from '@/lib/api';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Card from '@/components/ui/Card';
@@ -20,22 +20,12 @@ export default function Home() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), password: password.trim() }),
-      });
-      const data = await res.json();
-
-      if (res.ok && data.status === 'success') {
-        localStorage.setItem('token', data.token);
-        toast.success('Login berhasil! Selamat datang.');
-        router.push('/admin/dashboard');
-      } else {
-        toast.error(data.message || 'Login gagal, coba lagi.');
-      }
-    } catch {
-      toast.error('Login gagal, coba lagi.');
+      const res = await api.post('/login', { email, password });
+      localStorage.setItem('token', res.data.token);
+      toast.success('Login berhasil! Selamat datang.');
+      router.push('/admin/dashboard');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Login gagal, coba lagi.');
     } finally {
       setLoading(false);
     }

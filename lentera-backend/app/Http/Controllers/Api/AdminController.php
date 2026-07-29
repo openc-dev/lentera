@@ -51,43 +51,4 @@ class AdminController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Interval berhasil diperbarui!']);
     }
-
-    // 3. API Update Profile & Credentials Admin (Ganti Email & Password)
-    public function updateProfile(Request $request)
-    {
-        $user = $request->user();
-
-        $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
-            'current_password' => 'required_with:new_password|string',
-            'new_password' => 'sometimes|required|string|min:6',
-        ]);
-
-        if ($request->filled('new_password')) {
-            if (!Hash::check($request->current_password, $user->password)) {
-                return response()->json(['status' => 'error', 'message' => 'Password saat ini salah!'], 422);
-            }
-            $user->password = Hash::make($request->new_password);
-        }
-
-        if ($request->filled('name')) {
-            $user->name = $request->name;
-        }
-
-        if ($request->filled('email')) {
-            $user->email = $request->email;
-        }
-
-        $user->save();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Profil dan kredensial admin berhasil diperbarui!',
-            'user' => [
-                'name' => $user->name,
-                'email' => $user->email,
-            ]
-        ]);
-    }
 }

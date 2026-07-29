@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import api, { isUnauthorizedError } from '@/lib/api';
+import api from '@/lib/api';
 import { QRCodeCanvas } from 'qrcode.react';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
@@ -13,29 +13,28 @@ export default function DisplayQR() {
   const [expiresAt, setExpiresAt] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await api.get('/gateway/generate');
-        setQrToken(res.data.data.qr_token);
-        setExpiresAt(res.data.data.expires_at);
-        setError('');
-      } catch (err: unknown) {
-        if (isUnauthorizedError(err)) {
-          setError('Sesi Admin berakhir. Silakan login kembali lewat dashboard.');
-        } else {
-          setError('Gagal terhubung ke server.');
-        }
+  const fetchQRCode = async () => {
+    try {
+      const res = await api.get('/gateway/generate');
+      setQrToken(res.data.data.qr_token);
+      setExpiresAt(res.data.data.expires_at);
+      setError('');
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        setError('Sesi Admin berakhir. Silakan login kembali lewat dashboard.');
+      } else {
+        setError('Gagal terhubung ke server.');
       }
-    };
+    }
+  };
 
-    fetchData();
-    const interval = setInterval(fetchData, 60000);
+  useEffect(() => {
+    fetchQRCode();
+    const interval = setInterval(fetchQRCode, 60000);
     return () => clearInterval(interval);
   }, []);
 
-  const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || (typeof window !== 'undefined' ? window.location.origin : '');
-  const scanUrl = frontendUrl ? `${frontendUrl}/scan?token=${qrToken}` : '';
+  const scanUrl = typeof window !== 'undefined' ? `${window.location.origin}/scan?token=${qrToken}` : '';
 
   if (error) {
     return (

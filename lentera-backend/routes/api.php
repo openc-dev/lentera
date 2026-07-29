@@ -38,7 +38,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Fitur Sudo & Pengaturan Admin
     Route::post('/admin/sudo', [AdminController::class, 'verifySudo']);
     Route::put('/admin/settings', [AdminController::class, 'updateSettings']);
-    Route::put('/admin/profile', [AdminController::class, 'updateProfile']);
     Route::put('/assets/{id}/status', [AssetController::class, 'updateStatus']);
     
     // CRUD Master Data

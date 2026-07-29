@@ -2,12 +2,20 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        // Seed via Supabase Dashboard — not tracked in repo
+        \App\Models\User::create([
+            'name' => 'Boash Admin',
+            'email' => 'boashadmin@kampus.ac.id',
+            'password' => bcrypt('12345678'),
+        ]);
     }
 }

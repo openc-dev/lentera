@@ -3,11 +3,10 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/Toast';
-import api, { getApiErrorMessage } from '@/lib/api';
+import api from '@/lib/api';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import { Category, FormOption } from '@/lib/types';
 
 function BorrowFormContent() {
   const searchParams = useSearchParams();
@@ -15,11 +14,11 @@ function BorrowFormContent() {
   const toast = useToast();
   const submissionToken = searchParams.get('submission_token');
 
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [allOptions, setAllOptions] = useState<FormOption[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [allOptions, setAllOptions] = useState<any[]>([]);
   const [selectedCat, setSelectedCat] = useState<string>('');
-  const [loadingOptions, setLoadingOptions] = useState(!submissionToken); // true if no token
-  const [error, setError] = useState(submissionToken ? '' : 'Akses ditolak. Token sesi tidak ditemukan.');
+  const [loadingOptions, setLoadingOptions] = useState(true);
+  const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
     code: '',
@@ -34,18 +33,22 @@ function BorrowFormContent() {
   });
 
   useEffect(() => {
-    if (!submissionToken) return;
+    if (!submissionToken) {
+      setError('Akses ditolak. Token sesi tidak ditemukan.');
+      setLoadingOptions(false);
+      return;
+    }
 
     const fetchData = async () => {
       try {
         const [resOptions, resCats] = await Promise.all([
-          api.get<{ data: FormOption[] }>(`/assets/form-options?submission_token=${submissionToken}&status=available`),
-          api.get<{ data: Category[] }>('/categories')
+          api.get(`/assets/form-options?submission_token=${submissionToken}&status=available`),
+          api.get('/categories')
         ]);
         setAllOptions(resOptions.data.data);
         setCategories(resCats.data.data);
-      } catch (err: unknown) {
-        setError(getApiErrorMessage(err, 'Gagal mengambil data alat.'));
+      } catch (err: any) {
+        setError(err.response?.data?.message || 'Gagal mengambil data alat.');
       } finally {
         setLoadingOptions(false);
       }
@@ -75,9 +78,9 @@ function BorrowFormContent() {
 
       await api.post('/borrow', payload);
       toast.success('Peminjaman berhasil! Data sudah masuk ke database.');
-      router.push(`/cek-alat?code=${encodeURIComponent(code)}`);
-    } catch (err: unknown) {
-      toast.error(getApiErrorMessage(err, 'Peminjaman gagal.'));
+      router.push('/admin/dashboard');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Peminjaman gagal.');
     }
   };
 

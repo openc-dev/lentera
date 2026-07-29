@@ -2,7 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import api, { getApiErrorMessage } from '@/lib/api';
+import api from '@/lib/api';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 
@@ -11,20 +11,23 @@ function ScanContent() {
   const router = useRouter();
   const qrToken = searchParams.get('token');
 
-  const [loading, setLoading] = useState(!qrToken);
-  const [error, setError] = useState(qrToken ? '' : 'Token QR tidak ditemukan. Silakan scan ulang dari monitor.');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [submissionToken, setSubmissionToken] = useState('');
 
   useEffect(() => {
-    if (!qrToken) return;
+    if (!qrToken) {
+      setError('Token QR tidak ditemukan. Silakan scan ulang dari monitor.');
+      setLoading(false);
+      return;
+    }
 
     const validateToken = async () => {
       try {
         const res = await api.get(`/gateway/validate?token=${qrToken}`);
         setSubmissionToken(res.data.data.submission_token);
-        setError('');
-      } catch (err: unknown) {
-        setError(getApiErrorMessage(err, 'Token QR tidak valid atau kadaluarsa.'));
+      } catch (err: any) {
+        setError(err.response?.data?.message || 'Token QR tidak valid atau kadaluarsa.');
       } finally {
         setLoading(false);
       }
@@ -53,10 +56,7 @@ function ScanContent() {
           </svg>
         </div>
         <h1 className="text-2xl font-bold text-red-400 mb-2">Akses Ditolak</h1>
-        <p className="text-slate-400 text-sm mb-6">{error}</p>
-        <Button variant="secondary" onClick={() => router.push('/')}>
-          Scan Ulang QR Code
-        </Button>
+        <p className="text-slate-400 text-sm">{error}</p>
       </Card>
     </div>
   );
