@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     const catName = Array.isArray(cat) ? (cat[0]?.name as string) : (cat?.name as string);
     return {
       label: `${a.code} — ${a.name}`,
-      value: String(a.id),
+      value: a.code,
       category: catName || '',
     };
   });
