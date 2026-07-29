@@ -34,12 +34,6 @@ export default function DisplayQR() {
     return () => clearInterval(interval);
   }, []);
 
-  const [scanUrl, setScanUrl] = useState('');
-  
-  useEffect(() => {
-    setScanUrl(`${window.location.origin}/scan?token=${qrToken}`);
-  }, [qrToken]);
-
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
@@ -74,7 +68,7 @@ export default function DisplayQR() {
         <div className="bg-white p-4 rounded-2xl shadow-2xl shadow-[var(--accent-glow)]/20">
           {qrToken ? (
             <QRCodeCanvas
-              value={scanUrl}
+              value={typeof window !== 'undefined' ? `${window.location.origin}/scan?token=${qrToken}` : ''}
               size={350}
               level={"H"}
               includeMargin={true}
@@ -96,13 +90,6 @@ export default function DisplayQR() {
           </div>
         )}
       </Card>
-
-      <div className="mt-10 text-slate-500 text-sm flex flex-col items-center relative z-10">
-        <p>Dev Mode: Klik link di bawah untuk test tanpa scan:</p>
-        <a href={scanUrl} target="_blank" className="text-[var(--accent-secondary)] hover:underline break-all mt-1 transition-colors">
-          {scanUrl}
-        </a>
-      </div>
     </div>
   );
 }
