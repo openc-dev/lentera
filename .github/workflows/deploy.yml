@@ -14,5 +14,7 @@ jobs:
           node-version: 24
       - run: npm ci
         working-directory: lentera-frontend
+      - run: npx vercel link --project prj_YpwoVilhpNOGVH3XErGd8uoCyoLL --scope mu-adz-hudzaifah-s-projects --yes
+        working-directory: lentera-frontend
       - run: npx vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: lentera-frontend
