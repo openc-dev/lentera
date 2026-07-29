@@ -456,12 +456,6 @@ export default function AdminDashboard() {
                   <Button variant="ghost" size="sm" onClick={() => setConfirmModal('export-csv')} className="text-xs" disabled={actionLoading}>Ekspor CSV</Button>
                 </div>
               </div>
-              <div className="px-4 pb-2 text-xs text-slate-500">
-                Menampilkan <span className="font-semibold text-[var(--foreground)]">{filteredAssets.length}</span> dari <span className="font-semibold text-[var(--foreground)]">{assets.length}</span> aset
-                {selectedCat !== null && <> di kategori ini</>}
-                {searchQuery && <> untuk <span className="font-medium text-[var(--accent-secondary)]">"{searchQuery}"</span></>}
-              </div>
-
               <div className="h-[750px] overflow-y-auto overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead className="sticky top-0 bg-[var(--card)] border-b border-[var(--card-border)] text-sm text-slate-400">
