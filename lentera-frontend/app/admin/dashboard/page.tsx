@@ -41,7 +41,7 @@ export default function AdminDashboard() {
 
   const [catModal, setCatModal] = useState<{isOpen: boolean, type: 'add'|'edit', data: CategoryModalData}>({isOpen: false, type: 'add', data: {name: ''}});
   const [assetModal, setAssetModal] = useState<{isOpen: boolean, type: 'add'|'edit', data: AssetModalData}>({isOpen: false, type: 'add', data: {category_id: '', name: '', code: ''}});
-  const [settingsModal, setSettingsModal] = useState<{isOpen: boolean, qr_interval: number, form_interval: number}>(() => {
+  const [settingsModal, setSettingsModal] = useState<{isOpen: boolean, qr_interval: number | '', form_interval: number | ''}>(() => {
     const saved = typeof window !== 'undefined' ? localStorage.getItem('settings') : null;
     const defaults = { qr_interval: 30, form_interval: 15 };
     const parsed = saved ? JSON.parse(saved) : defaults;
@@ -223,14 +223,10 @@ export default function AdminDashboard() {
   };
 
   const saveSettings = () => {
-    localStorage.setItem('settings', JSON.stringify({
-      qr_interval: settingsModal.qr_interval,
-      form_interval: settingsModal.form_interval
-    }));
-    triggerAction('UPDATE_SETTINGS', undefined, {
-      qr_interval: Number(settingsModal.qr_interval),
-      form_interval: Number(settingsModal.form_interval)
-    });
+    const qr = settingsModal.qr_interval === '' ? 30 : settingsModal.qr_interval;
+    const fi = settingsModal.form_interval === '' ? 15 : settingsModal.form_interval;
+    localStorage.setItem('settings', JSON.stringify({ qr_interval: qr, form_interval: fi }));
+    triggerAction('UPDATE_SETTINGS', undefined, { qr_interval: Number(qr), form_interval: Number(fi) });
     setSettingsModal(p => ({ ...p, isOpen: false }));
   };
 
@@ -551,12 +547,12 @@ export default function AdminDashboard() {
           <div className="space-y-4 mb-6">
             <div>
               <label className="block text-sm font-semibold text-slate-300 mb-1.5">Interval Refresh Barcode (Menit)</label>
-              <Input type="number" min="1" value={settingsModal.qr_interval} onChange={(e) => { if (e.target.value === '') return; setSettingsModal({...settingsModal, qr_interval: Number(e.target.value)}) }} />
+              <Input type="number" min="1" value={settingsModal.qr_interval} onChange={(e) => setSettingsModal({...settingsModal, qr_interval: e.target.value === '' ? '' : Number(e.target.value)})} />
               <p className="text-xs text-slate-500 mt-1">Siklus perubahan gambar barcode di layar Monitor Kiosk.</p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-slate-300 mb-1.5">Durasi Isi Form Peminjaman (Menit)</label>
-              <Input type="number" min="1" value={settingsModal.form_interval} onChange={(e) => { if (e.target.value === '') return; setSettingsModal({...settingsModal, form_interval: Number(e.target.value)}) }} />
+              <Input type="number" min="1" value={settingsModal.form_interval} onChange={(e) => setSettingsModal({...settingsModal, form_interval: e.target.value === '' ? '' : Number(e.target.value)})} />
               <p className="text-xs text-slate-500 mt-1">Lama waktu token akses mahasiswa berlaku sebelum kadaluarsa.</p>
             </div>
           </div>
