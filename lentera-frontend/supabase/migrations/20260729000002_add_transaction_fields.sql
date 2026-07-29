@@ -1,0 +1,4 @@
+ALTER TABLE transactions ADD COLUMN IF NOT EXISTS student_npm TEXT;
+ALTER TABLE transactions ADD COLUMN IF NOT EXISTS student_prodi TEXT;
+ALTER TABLE transactions ADD COLUMN IF NOT EXISTS lecturer TEXT;
+ALTER TABLE transactions ADD COLUMN IF NOT EXISTS expected_return_at TIMESTAMPTZ;
