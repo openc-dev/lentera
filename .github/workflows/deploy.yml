@@ -15,4 +15,3 @@ jobs:
       - run: npm ci
         working-directory: lentera-frontend
       - run: npx vercel --prod --yes --scope mu-adz-hudzaifah-s-projects --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: lentera-frontend
