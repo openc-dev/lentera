@@ -1,37 +1,51 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
+import { verifyGatewayToken } from '@/lib/gateway-token';
+import { getServerSupabaseAdmin } from '@/lib/supabase-server';
 
 export async function GET(request: Request) {
-  const supabase = getSupabase();
   const { searchParams } = new URL(request.url);
   const token = searchParams.get('token');
 
   if (!token) {
-    return NextResponse.json({ status: 'error', message: 'Token required' }, { status: 400 });
+    return NextResponse.json(
+      { status: 'error', message: 'Token diperlukan untuk validasi akses.' },
+      { status: 400 }
+    );
   }
 
-  const { data } = await supabase.from('settings').select('value').eq('key', 'gateway_token').single();
-
-  if (!data) {
-    return NextResponse.json({ status: 'error', message: 'Token tidak ditemukan' }, { status: 401 });
+  // 1. Verify signed HMAC token
+  const check = verifyGatewayToken(token);
+  if (check.valid) {
+    return NextResponse.json({
+      status: 'success',
+      data: { submission_token: token },
+    });
   }
 
-  const stored = JSON.parse(data.value);
-  const isValid = stored.token === token && Date.now() < stored.expires_at;
+  // 2. Fallback check for legacy tokens stored in settings (during transition)
+  try {
+    const supabase = getServerSupabaseAdmin();
+    const { data } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', 'gateway_token')
+      .maybeSingle();
 
-  if (!isValid) {
-    return NextResponse.json({ status: 'error', message: 'Token tidak valid atau kadaluarsa' }, { status: 401 });
+    if (data?.value) {
+      const stored = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+      if (stored?.token === token && Date.now() < stored.expires_at) {
+        return NextResponse.json({
+          status: 'success',
+          data: { submission_token: token },
+        });
+      }
+    }
+  } catch {
+    // Ignore legacy fallback error
   }
 
-  return NextResponse.json({
-    status: 'success',
-    data: { submission_token: token },
-  });
+  return NextResponse.json(
+    { status: 'error', message: check.error || 'Token QR tidak valid atau telah kadaluarsa.' },
+    { status: 401 }
+  );
 }

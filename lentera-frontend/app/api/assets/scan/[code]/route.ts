@@ -1,15 +1,9 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getServerSupabaseAdmin } from '@/lib/supabase-server';
+import { requireAdminAuth } from '@/lib/auth-server';
 
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-}
-
-export async function GET(_request: Request, { params }: { params: Promise<{ code: string }> }) {
-  const supabase = getSupabase();
+export async function GET(request: Request, { params }: { params: Promise<{ code: string }> }) {
+  const supabase = getServerSupabaseAdmin();
   const { code } = await params;
 
   const { data, error } = await supabase
@@ -31,11 +25,27 @@ export async function GET(_request: Request, { params }: { params: Promise<{ cod
     .limit(1)
     .maybeSingle();
 
+  const auth = requireAdminAuth(request);
+  const isAdmin = auth.authorized;
+
+  let sanitizedTxn = null;
+  if (transaction) {
+    if (isAdmin) {
+      sanitizedTxn = transaction;
+    } else {
+      sanitizedTxn = {
+        student_name: transaction.student_name ? `${transaction.student_name.slice(0, 3)}***` : 'Mahasiswa',
+        subject: transaction.subject || null,
+        borrowed_at: transaction.borrowed_at,
+      };
+    }
+  }
+
   return NextResponse.json({
     status: 'success',
     data: {
       ...data,
-      lastTransaction: transaction || null,
+      lastTransaction: sanitizedTxn,
     },
   });
 }

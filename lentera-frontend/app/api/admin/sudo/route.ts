@@ -1,37 +1,57 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import bcrypt from 'bcryptjs';
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-}
+import { getServerSupabaseAdmin } from '@/lib/supabase-server';
+import { requireAdminAuth } from '@/lib/auth-server';
 
 export async function POST(request: Request) {
-  const supabase = getSupabase();
-  const body = await request.json();
-  const password = (body.password || '').trim();
+  try {
+    // 1. Enforce that caller is an already authenticated administrator
+    const auth = requireAdminAuth(request);
+    if (!auth.authorized) {
+      return auth.response!;
+    }
 
-  const { data: admin } = await supabase
-    .from('admins')
-    .select('password')
-    .eq('email', 'boashadmin@unbo.ac.id')
-    .single();
+    const supabase = getServerSupabaseAdmin();
+    const body = await request.json();
+    const password = (body.password || '').trim();
 
-  if (!admin) {
-    return NextResponse.json({ status: 'error', message: 'Admin tidak ditemukan' }, { status: 404 });
+    if (!password) {
+      return NextResponse.json(
+        { status: 'error', message: 'Password sudo wajib diisi.' },
+        { status: 400 }
+      );
+    }
+
+    const targetEmail = auth.admin!.email;
+
+    const { data: admin } = await supabase
+      .from('admins')
+      .select('id, email, password')
+      .eq('email', targetEmail)
+      .maybeSingle();
+
+    if (!admin) {
+      return NextResponse.json(
+        { status: 'error', message: 'Akun admin tidak ditemukan.' },
+        { status: 404 }
+      );
+    }
+
+    const valid = await bcrypt.compare(password, admin.password);
+    if (!valid) {
+      return NextResponse.json(
+        { status: 'error', message: 'Password sudo salah!' },
+        { status: 401 }
+      );
+    }
+
+    return NextResponse.json({
+      status: 'success',
+      message: 'Aksi sudo berhasil diverifikasi!',
+      sudo_token: 'sudo_' + Math.random().toString(36).substring(2, 15),
+    });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Terjadi kesalahan pada server sudo.';
+    return NextResponse.json({ status: 'error', message }, { status: 500 });
   }
-
-  const valid = await bcrypt.compare(password, admin.password);
-  if (!valid) {
-    return NextResponse.json({ status: 'error', message: 'Password salah!' }, { status: 401 });
-  }
-
-  return NextResponse.json({
-    status: 'success',
-    message: 'Aksi berhasil dieksekusi!',
-    sudo_token: 'sudo_' + Math.random().toString(36).substring(2, 15),
-  });
 }

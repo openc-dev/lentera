@@ -1,15 +1,9 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-}
+import { getServerSupabaseAdmin } from '@/lib/supabase-server';
+import { requireAdminAuth } from '@/lib/auth-server';
 
 export async function GET() {
-  const supabase = getSupabase();
+  const supabase = getServerSupabaseAdmin();
   const { data } = await supabase.from('settings').select('key, value');
 
   if (!data) {
@@ -18,7 +12,7 @@ export async function GET() {
 
   const settings: Record<string, string> = {};
   for (const row of data) {
-    settings[row.key] = row.value;
+    settings[row.key] = typeof row.value === 'string' ? row.value : JSON.stringify(row.value);
   }
 
   return NextResponse.json({
@@ -28,19 +22,24 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
-  const supabase = getSupabase();
+  const auth = requireAdminAuth(request);
+  if (!auth.authorized) {
+    return auth.response!;
+  }
+
+  const supabase = getServerSupabaseAdmin();
   const body = await request.json();
 
   if (body.qr_interval !== undefined) {
     await supabase.from('settings').upsert(
-      { key: 'qr_interval', value: String(body.qr_interval) },
+      { key: 'qr_interval', value: JSON.stringify(Number(body.qr_interval)) },
       { onConflict: 'key' }
     );
   }
 
   if (body.form_interval !== undefined) {
     await supabase.from('settings').upsert(
-      { key: 'form_interval', value: String(body.form_interval) },
+      { key: 'form_interval', value: JSON.stringify(Number(body.form_interval)) },
       { onConflict: 'key' }
     );
   }

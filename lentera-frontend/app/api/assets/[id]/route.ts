@@ -1,21 +1,20 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-}
+import { getServerSupabaseAdmin } from '@/lib/supabase-server';
+import { requireAdminAuth } from '@/lib/auth-server';
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const supabase = getSupabase();
+  const auth = requireAdminAuth(request);
+  if (!auth.authorized) {
+    return auth.response!;
+  }
+
+  const supabase = getServerSupabaseAdmin();
   const { id } = await params;
   const body = await request.json();
   const updates: Record<string, unknown> = {};
 
-  if (body.name) updates.name = body.name;
-  if (body.code) updates.code = body.code;
+  if (body.name) updates.name = body.name.trim();
+  if (body.code) updates.code = body.code.toUpperCase().trim();
   if (body.category_id) updates.category_id = Number(body.category_id);
   updates.updated_at = new Date().toISOString();
 
@@ -33,8 +32,13 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   return NextResponse.json({ status: 'success', data });
 }
 
-export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const supabase = getSupabase();
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const auth = requireAdminAuth(request);
+  if (!auth.authorized) {
+    return auth.response!;
+  }
+
+  const supabase = getServerSupabaseAdmin();
   const { id } = await params;
   const { error } = await supabase.from('assets').delete().eq('id', id);
 

@@ -1,39 +1,44 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
+import { getServerSupabaseAdmin } from '@/lib/supabase-server';
+import { generateGatewayToken } from '@/lib/gateway-token';
 
 export async function GET() {
-  const supabase = getSupabase();
-  const qrToken = Math.random().toString(36).substring(2, 12);
+  try {
+    const supabase = getServerSupabaseAdmin();
 
-  const { data: settingsData } = await supabase
-    .from('settings')
-    .select('value')
-    .eq('key', 'form_interval')
-    .single();
+    const { data: settingsData } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', 'form_interval')
+      .maybeSingle();
 
-  const formInterval = settingsData ? Number(JSON.parse(settingsData.value)) : 15;
-  const expiresAt = Date.now() + formInterval * 60 * 1000;
+    let formInterval = 15;
+    if (settingsData?.value) {
+      try {
+        formInterval = Number(JSON.parse(settingsData.value)) || 15;
+      } catch {
+        formInterval = Number(settingsData.value) || 15;
+      }
+    }
 
-  await supabase.from('settings').upsert(
-    { key: 'gateway_token', value: JSON.stringify({ token: qrToken, expires_at: expiresAt }) },
-    { onConflict: 'key' }
-  );
+    const { token: qrToken, expiresAt } = generateGatewayToken(formInterval);
 
-  const expiresAtStr = new Date(expiresAt).toLocaleString('id-ID', {
-    timeZone: 'Asia/Jakarta',
-    weekday: 'long', year: 'numeric', month: 'long',
-    day: 'numeric', hour: '2-digit', minute: '2-digit',
-  });
+    const expiresAtStr = new Date(expiresAt).toLocaleString('id-ID', {
+      timeZone: 'Asia/Jakarta',
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
 
-  return NextResponse.json({
-    status: 'success',
-    data: { qr_token: qrToken, expires_at: expiresAtStr },
-  });
+    return NextResponse.json({
+      status: 'success',
+      data: { qr_token: qrToken, expires_at: expiresAtStr },
+    });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Gagal menghasilkan token gateway.';
+    return NextResponse.json({ status: 'error', message }, { status: 500 });
+  }
 }
