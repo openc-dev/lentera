@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    actor M as Mahasiswa (Klien)
+    participant K as Kiosk Display (/display)
+    participant F as Formulir Pinjam (/form/borrow)
+    participant API as Route Handler (/api/borrow)
+    participant DB as Supabase PostgreSQL
+
+    Note over K: Kiosk merotasi QR Gateway setiap 60 detik
+    K->>M: Tampilkan QR Code (Gateway Token)
+    M->>F: Pindai QR & Buka Form Pinjam
+    F->>F: Validasi Masa Aktif Token (TTL Guard)
+    
+    M->>F: Input Data (NPM, Nama, Matkul, Dosen, Pilih Aset)
+    F->>API: POST /api/borrow (Payload Transaksi)
+    
+    rect rgb(20, 20, 20)
+        Note over API,DB: Blok Transaksi Atomik (Concurrency Safe)
+        API->>DB: Periksa Status Aset (Wajib 'available')
+        alt Aset Masih Tersedia (available)
+            API->>DB: Kunci Aset & Update Status -> 'borrowed'
+            API->>DB: Insert Record ke Tabel 'transactions'
+            DB-->>API: 200 OK (Transaksi Berhasil)
+            API-->>F: Respons Sukses (Timestamp & Token Transaksi)
+            F-->>M: Tampilkan Notifikasi Sukses Peminjaman
+        else Aset Sudah Dipinjam Orang Lain
+            API-->>F: 409 Conflict ("Barang baru saja dipinjam")
+            F-->>M: Tampilkan Peringatan Gagal Transaksi
+        end
+    end

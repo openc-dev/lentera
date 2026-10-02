@@ -1,80 +1,69 @@
-# Lentera — Lending & Tracking Application
+# Lentera — Quality Audit Suite
+> **Branch Audit:** `qa/ppl-audit`  
+> **Mata Kuliah:** Pengujian Perangkat Lunak (KB260004 &middot; 2 SKS)  
+> **Program Studi:** D4 Teknologi Rekayasa Multimedia (TRM3A1) &middot; TA 2026/2027  
+> **Dosen Pengampu:** Charmiyanti Nurkentjana Aju, S.Kom., M.Kom.  
+> **Tim Penguji (Kelompok 1):**  
+> &bull; **Mu'adz Hudzaifah (24903460014)** — Perancang Arsitektur Pengujian & Automasi (`@tests/`)  
+> &bull; **Zahraan Dzakii Ts. (24903460011)** — Analis Alur Sistem & White-Box (`@audit/`)  
+> &bull; **Syifa Amelia (24903460001)** — Analis Pengujian Fungsional & Advokat Pengguna (`@reports/`)  
 
-Laboratory asset lending and tracking system with kiosk-based self-service borrowing and return.
+---
 
-## Tech Stack
+## 1. PETA NAVIGASI AUDIT REPOSITORI
 
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | Next.js 16, React 19, TypeScript |
-| **Styling** | Tailwind CSS v4 |
-| **API Layer** | Next.js Route Handlers (Vercel Serverless Functions) — inside `lentera-frontend/app/api/` |
-| **Database** | Supabase (PostgreSQL) |
-| **Deployment** | Vercel |
+Repositori pada branch ini dikonfigurasi sebagai **lingkungan audit mutu independen** terisolasi mengacu pada standar ISO/IEC/IEEE 29119:
 
-**Note:** The `lentera-backend/` directory contains an abandoned Laravel prototype used only as a reference during initial development. It is NOT used in production. All API logic lives in the Next.js route handlers (`lentera-frontend/app/api/`).
-
-## Project Structure
-
-```
-lentera/
-├── lentera-frontend/          # Next.js web app (the actual application)
-│   ├── app/
-│   │   ├── api/               # Serverless API route handlers
-│   │   │   ├── assets/        # Asset CRUD + scan
-│   │   │   ├── borrow/        # Borrow workflow
-│   │   │   ├── return/        # Return workflow
-│   │   │   ├── gateway/       # Kiosk QR token generate & validate
-│   │   │   ├── categories/    # Category CRUD
-│   │   │   ├── admin/         # Admin settings & sudo
-│   │   │   ├── login/         # Authentication
-│   │   │   └── logout/        # Session end
-│   │   ├── (admin/)           # Admin dashboard, print labels
-│   │   ├── (cek-alat/)        # Public asset check page
-│   │   ├── (display/)         # Kiosk QR display monitor
-│   │   ├── (form/borrow/)     # Borrow form (kiosk)
-│   │   ├── (form/return/)     # Return form (kiosk)
-│   │   └── (scan/)            # QR scan landing page
-│   ├── components/            # Reusable React components (UI kit)
-│   ├── lib/                   # API client, types, utilities
-│   └── supabase/              # DB migrations & CLI config
-│       └── migrations/        # SQL migration files
-├── lentera-backend/            # Laravel prototype (unused / reference only)
-└── README.md
+```text
+lentera/ (Branch: qa/ppl-audit)
+├── README.md               # Halaman utama profil audit sistem
+├── TEST_PLAN.md            # Master Test Plan resmi (IEEE 829 / ISO 29119)
+├── AGENTS.md               # Master Agent Directive (Aturan agen AI)
+│
+├── audit/                  # [KAVLING ZAHRAAN] Pemodelan Sistem & Analisis Logika
+│   ├── AGENTS.md           # Panduan kerja agen analis
+│   ├── diagrams/           # Diagram Sequence, Activity, State (Mermaid murni)
+│   └── specs/              # Spesifikasi batas nilai input (BVA/EP) & aturan bisnis
+│
+├── tests/                  # [KAVLING MU'ADZ] Executable Tests & Automasi
+│   ├── AGENTS.md           # Panduan kerja agen arsitek automasi
+│   ├── unit/               # Pengujian unit fungsi validator & token
+│   ├── api/                # Pengujian integrasi endpoint API HTTP
+│   ├── concurrency/        # Simulasi race condition transaksi aset simultan
+│   └── fixtures/           # Script seed data inventaris laboratorium dummy
+│
+├── reports/                # [ETALASE BERSAMA] Arsip Laporan & Slide Mingguan
+│   ├── AGENTS.md           # Panduan pengarsipan hasil pengujian
+│   ├── pertemuan-03/       # Pemaparan Sistem Lentera (Laporan & Slide)
+│   └── ...                 # Terus diperbarui hingga pertemuan-13 (UAS)
+│
+└── lentera-frontend/       # [TARGET SISTEM] Aplikasi Web Next.js 16 + Supabase
 ```
 
-## Flow
+---
 
-1. **Admin** manages assets, categories, and settings via the dashboard (`/admin/dashboard`).
-2. **Kiosk monitor** (`/display`) shows a rotating QR code with a gateway token.
-3. **Student** scans the QR → `/scan` validates the token → picks **Pinjam** or **Kembalikan**.
-4. **Borrow** (`/form/borrow`): Student fills form (name, NPM, subject, lecturer, return date) → submits → asset status set to `borrowed`.
-5. **Return** (`/form/return`): Student selects borrowed asset + enters NPM → submits → asset status back to `available`.
+## 2. DOKUMENTASI & PANDUAN PENGUJIAN UTAMA
 
-## Database
+- **[TEST_PLAN.md](./TEST_PLAN.md)**: Rencana pengujian lengkap 13 pertemuan, profil sistem, 4 bisnis proses, dan strategi pengujian.
+- **[Laporan Pertemuan 3](./reports/pertemuan-03/LAPORAN_P3.md)**: Ringkasan eksekutif penetapan platform Lentera.
+- **[Slide Presentasi Pertemuan 3](./reports/pertemuan-03/SLIDES_P3.md)**: Berkas slide 11 halaman untuk pemaparan di hadapan dosen pengampu.
+- **[Form Lapor Cacat (Bug Report)](./.github/ISSUE_TEMPLATE/bug_report.md)**: Template pelaporan temuan bug bagi penguji fungsional.
 
-Hosted on **Supabase** (PostgreSQL). Schema migrations in `lentera-frontend/supabase/migrations/`:
+---
 
-- `20260729000001_init.sql` — Tables: `admins`, `categories`, `assets`, `transactions`, `settings`
-- `20260729000002_add_transaction_fields.sql` — Adds `student_npm`, `student_prodi`, `lecturer`, `expected_return_at`
+## 3. LINGKUNGAN PENGUJIAN STAGING (VERCEL & SUPABASE)
 
-## Development
+Pengujian fungsional pengguna manual dilakukan pada lingkungan pratinjau (*preview deployment*) terisolasi:
+- **Aplikasi Web Sasaran:** Next.js 16 (React 19, TypeScript, Tailwind CSS v4)
+- **Basis Data:** Supabase PostgreSQL (Row Level Security & Atomic RPC)
+- **Pencatatan Masalah:** GitHub Issues Tracker (`https://github.com/openc-dev/lentera/issues`)
 
-```bash
-cd lentera-frontend
-npm install
-npm run dev
-```
+---
 
-## Environment Variables
+## 4. ALUR SISTEM LENTERA SECARA UMUM
 
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (API routes) |
-
-## Developed By
-
-- **Backend (original Laravel prototype):** [@rannd1nt](https://github.com/rannd1nt) (Zahraan Dzakii Ts.)
-- **Frontend & Current Backend (Next.js + Supabase):** [@MuadzHdz](https://github.com/MuadzHdz) (Mu'adz Hudzaifah)
+1. **Admin / Laboran** mengelola master aset dan memantau sirkulasi alat via `/admin/dashboard`.
+2. **Monitor Kiosk Lab** (`/display`) memutar kode QR dinamis berisi gateway token dengan masa aktif terbatas (TTL).
+3. **Mahasiswa** memindai QR lewat ponsel $\rightarrow$ diarahkan ke `/scan` $\rightarrow$ memilih menu **Pinjam** atau **Kembalikan**.
+4. **Form Pinjam** (`/form/borrow`): Mahasiswa mengisi identitas (NPM, Nama, Matkul, Dosen) dan memilih alat yang tersedia $\rightarrow$ status aset berubah jadi `borrowed`.
+5. **Form Kembali** (`/form/return`): Mahasiswa memilih alat yang dibawa dan memvalidasi NPM peminjam $\rightarrow$ status aset kembali ke `available`.
