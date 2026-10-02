@@ -64,6 +64,6 @@ Pengujian fungsional pengguna manual dilakukan pada lingkungan pratinjau (*previ
 
 1. **Admin / Laboran** mengelola master aset dan memantau sirkulasi alat via `/admin/dashboard`.
 2. **Monitor Kiosk Lab** (`/display`) memutar kode QR dinamis berisi gateway token dengan masa aktif terbatas (TTL).
-3. **Mahasiswa** memindai QR lewat ponsel $\rightarrow$ diarahkan ke `/scan` $\rightarrow$ memilih menu **Pinjam** atau **Kembalikan**.
-4. **Form Pinjam** (`/form/borrow`): Mahasiswa mengisi identitas (NPM, Nama, Matkul, Dosen) dan memilih alat yang tersedia $\rightarrow$ status aset berubah jadi `borrowed`.
-5. **Form Kembali** (`/form/return`): Mahasiswa memilih alat yang dibawa dan memvalidasi NPM peminjam $\rightarrow$ status aset kembali ke `available`.
+3. **Mahasiswa** memindai QR lewat ponsel → diarahkan ke `/scan` → memilih menu **Pinjam** atau **Kembalikan**.
+4. **Form Pinjam** (`/form/borrow`): Mahasiswa mengisi identitas (NPM, Nama, Matkul, Dosen) dan memilih alat yang tersedia → status aset berubah jadi `borrowed`.
+5. **Form Kembali** (`/form/return`): Mahasiswa memilih alat yang dibawa dan memvalidasi NPM peminjam → status aset kembali ke `available`.

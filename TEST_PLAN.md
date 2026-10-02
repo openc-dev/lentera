@@ -35,7 +35,7 @@
 - **Infrastruktur Produksi:** Vercel Edge / Serverless Network.
 
 #### Karakteristik Khusus Pengujian
-1. **State Machine Deterministik:** Status aset bergerak dalam siklus tertutup (`available` $\leftrightarrow$ `borrowed`).
+1. **State Machine Deterministik:** Status aset bergerak dalam siklus tertutup (`available` ↔ `borrowed`).
 2. **Dual-Screen Kiosk Gateway:** Sinkronisasi visual monitor anjungan lab (`/display`) dengan peramban ponsel mahasiswa (`/scan`).
 3. **Integritas Transaksi Bersamaan:** Memerlukan proteksi basis data agar satu aset tidak dapat dipinjam oleh dua mahasiswa pada detik yang sama (*concurrency race condition*).
 

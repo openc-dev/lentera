@@ -10,7 +10,7 @@
 ### 1. RINGKASAN EKSEKUTIF
 Pada sesi perkuliahan Pertemuan ke-3, Kelompok 1 secara resmi menetapkan dan memaparkan platform sasaran pengujian perangkat lunak bernama **Lentera (Laboratory Asset Lending & Tracking System)**. 
 
-Lentera dipilih karena merepresentasikan sistem hybrid (kiosk anjungan lab + peramban seluler pengguna) yang memiliki tantangan integritas data nyata, siklus state machine tertutup (`available` $\leftrightarrow$ `borrowed`), serta potensi kerentanan konkurensi (*race condition*) pada saat transaksi massal praktikum.
+Lentera dipilih karena merepresentasikan sistem hybrid (kiosk anjungan lab + peramban seluler pengguna) yang memiliki tantangan integritas data nyata, siklus state machine tertutup (`available` ↔ `borrowed`), serta potensi kerentanan konkurensi (*race condition*) pada saat transaksi massal praktikum.
 
 ---
 

@@ -10,13 +10,13 @@ style: |
     background-color: #ffffff;
     color: #0f172a;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 32px;
+    font-size: 13px;
     line-height: 1.45;
-    padding: 32px 54px;
+    padding: 38px 56px;
   }
   header {
     font-family: "JetBrains Mono", monospace;
-    font-size: 23px;
+    font-size: 14.5px;
     color: #64748b;
     letter-spacing: 1px;
     border-bottom: 1px solid #e2e8f0;
@@ -24,31 +24,31 @@ style: |
   }
   footer {
     font-family: "JetBrains Mono", monospace;
-    font-size: 23px;
+    font-size: 14.5px;
     color: #64748b;
     border-top: 1px solid #e2e8f0;
     padding-top: 4px;
   }
   h1 {
     font-family: "JetBrains Mono", monospace;
-    font-size: 46px; color: #000000; margin: 6px 0 10px 0; font-weight: 800;
+    font-size: 30px; color: #000000; margin: 6px 0 10px 0; font-weight: 800;
     letter-spacing: -0.5px;
   }
   h2 {
     font-family: "JetBrains Mono", monospace;
-    font-size: 32px; color: #0f172a;
+    font-size: 14px; color: #0f172a;
     margin: 4px 0 8px 0;
     font-weight: 700;
   }
   h3 {
-    font-size: 25px; color: #64748b;
+    font-size: 16px; color: #64748b;
     margin: 0 0 12px 0;
     font-weight: 500;
   }
   .badge {
     display: inline-block;
     font-family: "JetBrains Mono", monospace;
-    font-size: 26px;
+    font-size: 16px;
     font-weight: 700;
     padding: 3px 9px;
     border-radius: 4px;
@@ -85,7 +85,7 @@ style: |
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
-    padding: 14px 16px;
+    padding: 12px 14px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.02);
   }
   .card-highlight {
@@ -95,7 +95,7 @@ style: |
     background-color: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
-    padding: 14px 16px;
+    padding: 12px 14px;
   }
   .stat-num {
     font-family: "JetBrains Mono", monospace;
@@ -106,14 +106,14 @@ style: |
     margin-bottom: 4px;
   }
   .stat-label {
-    font-size: 22px;
+    font-size: 14px;
     color: #64748b;
     font-weight: 500;
   }
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 26px;
+    font-size: 16px;
     margin-top: 8px;
   }
   th {
@@ -149,48 +149,48 @@ style: |
 ---
 
 <!-- SLIDE 1: COVER & IDENTITAS -->
-<span class="badge badge-black">[PROFIL PLATFORM SASARAN]</span>
+<span class="badge badge-black">PROFIL PLATFORM SASARAN</span>
 
-# SISTEM LENTERA (LAB ASSET TRACKING)
+# LENTERA (Lending & Tracking Application)
 ### Pemaparan Platform Sasaran Pengujian Mutu Perangkat Lunak dari Perspektif Pengguna
 
 <div class="grid-2" style="margin-top: 14px;">
   <div class="card card-highlight">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; color: #000000; font-weight: 700; margin-bottom: 4px;">TIM PENGUJI (KELOMPOK 1)</div>
-    <div style="font-size: 26px; font-weight: 700; color: #000000;">Teknologi Rekayasa Multimedia &middot; Kelas TRM3A1</div>
-    <div style="font-size: 23px; color: #475569; margin-top: 6px; line-height: 1.5;">
-      &bull; <strong>Mu'adz Hudzaifah (24903460014)</strong>: Perancang Arsitektur Pengujian & Automasi<br>
-      &bull; <strong>Zahraan Dzakii Ts. (24903460011)</strong>: Analis Alur Sistem & White-Box<br>
-      &bull; <strong>Syifa Amelia (24903460001)</strong>: Analis Pengujian Fungsional & Advokat Pengguna
-    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 16px; color: #000000; font-weight: 700; margin-bottom: 4px;"><strong>TIM PENGUJI &middot; KELOMPOK 1</strong></div>
+    <div style="font-size: 16px; font-weight: 700; color: #000000;">Teknologi Rekayasa Multimedia &middot; Kelas TRM3A1</div>
+    <ul style="font-size: 14px; color: #334155; margin: 6px 0 0 18px; padding: 0; line-height: 1.5;">
+      <li><strong>Mu'adz Hudzaifah (24903460014)</strong>: Arsitektur Pengujian & Automasi</li>
+      <li><strong>Zahraan Dzakii Ts. (24903460011)</strong>: Analis Alur Sistem & White-Box</li>
+      <li><strong>Syifa Amelia (24903460001)</strong>: Pengujian Fungsional & Advokat Pengguna</li>
+    </ul>
   </div>
   <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; color: #000000; font-weight: 700; margin-bottom: 4px;">PARAMETER PERKULIAHAN</div>
-    <div style="font-size: 23px; line-height: 1.55; color: #334155;">
-      &bull; <strong>Mata Kuliah:</strong> Pengujian Perangkat Lunak (KB260004 &middot; 2 SKS)<br>
-      &bull; <strong>Dosen Pengampu:</strong> Charmiyanti Nurkentjana Aju, S.Kom., M.Kom.<br>
-      &bull; <strong>Target Repositori:</strong> <code>github.com/openc-dev/lentera</code><br>
-      &bull; <strong>Branch Audit Terisolasi:</strong> <code>qa/ppl-audit</code>
-    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 16px; color: #000000; font-weight: 700; margin-bottom: 4px;"><strong>PARAMETER PERKULIAHAN</strong></div>
+    <ul style="font-size: 14px; color: #334155; margin: 6px 0 0 18px; padding: 0; line-height: 1.55;">
+      <li><strong>Mata Kuliah:</strong> Pengujian Perangkat Lunak (2 SKS)</li>
+      <li><strong>Dosen Pengampu:</strong> Charmiyanti Nurkentjana Aju, S.Kom., M.Kom.</li>
+      <li><strong>Repositori Sasaran:</strong> <code>github.com/openc-dev/lentera</code></li>
+      <li><strong>Branch Audit:</strong> <code>qa/ppl-audit</code></li>
+    </ul>
   </div>
 </div>
 
-<div style="margin-top: 16px; font-size: 21px; font-family: 'JetBrains Mono', monospace; color: #64748b;">
+<div style="margin-top: 16px; font-size: 13.5px; font-family: 'JetBrains Mono', monospace; color: #64748b;">
   Universitas Boash &middot; Semester Ganjil 2026/2027
 </div>
 
 ---
 
 <!-- SLIDE 2: LATAR BELAKANG & DEFINISI SISTEM -->
-<span class="badge">[01] PENDAHULUAN SISTEM</span>
+<span class="badge">01 &middot; PENDAHULUAN SISTEM</span>
 
 # APA ITU PLATFORM LENTERA?
 ### Transformasi Otomasi Sirkulasi Alat Laboratorium Berbasis Anjungan Mandiri (Self-Service)
 
 <div class="grid-2">
   <div class="card card-subtle">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: #000000; margin-bottom: 6px;">[MASALAH] LOGBOOK MANUAL DI LAB</div>
-    <ul style="font-size: 23px; color: #334155; line-height: 1.45;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: #000000; margin-bottom: 6px;"><strong>MASALAH &middot; LOGBOOK MANUAL DI LAB</strong></div>
+    <ul style="font-size: 14.5px; color: #334155; line-height: 1.45;">
       <li>Pencatatan peminjaman masih memakai buku fisik atau form tercecer.</li>
       <li>Status ketersediaan alat tidak bisa dipantau secara real-time.</li>
       <li>Rentan manipulasi identitas (NPM fiktif atau salah catat).</li>
@@ -199,8 +199,8 @@ style: |
   </div>
 
   <div class="card card-highlight">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: #000000; margin-bottom: 6px;">[SOLUSI] EKOSISTEM DIGITAL LENTERA</div>
-    <ul style="font-size: 23px; color: #334155; line-height: 1.45;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: #000000; margin-bottom: 6px;"><strong>SOLUSI &middot; EKOSISTEM DIGITAL LENTERA</strong></div>
+    <ul style="font-size: 14.5px; color: #334155; line-height: 1.45;">
       <li><strong>Anjungan Kiosk Lab:</strong> Monitor menampilkan QR token dinamis dengan masa aktif terbatas (TTL).</li>
       <li><strong>Mobile Client Tanpa Instalasi:</strong> Mahasiswa memindai QR lewat kamera HP langsung membuka form transaksi.</li>
       <li><strong>Atomic State Machine:</strong> Status barang berubah secara deterministik (<code>available</code> &harr; <code>borrowed</code>).</li>
@@ -209,7 +209,7 @@ style: |
 </div>
 
 <div class="card" style="margin-top: 14px; padding: 10px 14px;">
-  <div style="font-size: 23px; color: #334155;">
+  <div style="font-size: 14.5px; color: #334155;">
     <strong>Tech Stack Teruji:</strong> Next.js 16 (React 19, TypeScript), Tailwind CSS v4, Supabase (PostgreSQL, Row Level Security), dan Next.js Serverless Route Handlers di Vercel Network.
   </div>
 </div>
@@ -217,16 +217,16 @@ style: |
 ---
 
 <!-- SLIDE 3: EKOSISTEM PENGGUNA (DUAL-ACTOR MODEL) -->
-<span class="badge">[02] AKTOR PENGGUNA</span>
+<span class="badge">02 &middot; AKTOR PENGGUNA</span>
 
 # DUA AKTOR UTAMA SISTEM
 ### Pemisahan Peran, Tanggung Jawab, dan Batas Akses dalam Operasional Harian
 
 <div class="grid-2">
   <div class="card card-highlight">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 23px; font-weight: 700; color: #000000;">1. MAHASISWA / PEMINJAM (END-USER)</div>
-    <div style="font-size: 22px; color: #64748b; margin-bottom: 8px;">Akses Perangkat: Smartphone via Web Browser</div>
-    <ul style="font-size: 23px; line-height: 1.5; color: #1e293b;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 14.5px; font-weight: 700; color: #000000;">1. MAHASISWA / PEMINJAM (END-USER)</div>
+    <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">Akses Perangkat: Smartphone via Web Browser</div>
+    <ul style="font-size: 14.5px; line-height: 1.5; color: #1e293b;">
       <li>Memindai QR gateway aktif di layar anjungan fisik lab.</li>
       <li>Memilih tindakan transaksi: <strong>Pinjam Alat</strong> atau <strong>Kembalikan Alat</strong>.</li>
       <li>Mengisi data validitas perkuliahan (Mata Kuliah, Dosen, Estimasi Jam Selesai).</li>
@@ -235,9 +235,9 @@ style: |
   </div>
 
   <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 23px; font-weight: 700; color: #000000;">2. LABORAN / ADMIN SISTEM (OPERATOR)</div>
-    <div style="font-size: 22px; color: #64748b; margin-bottom: 8px;">Akses Perangkat: Komputer Lab / Desktop Browser</div>
-    <ul style="font-size: 23px; line-height: 1.5; color: #1e293b;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 14.5px; font-weight: 700; color: #000000;">2. LABORAN / ADMIN SISTEM (OPERATOR)</div>
+    <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">Akses Perangkat: Komputer Lab / Desktop Browser</div>
+    <ul style="font-size: 14.5px; line-height: 1.5; color: #1e293b;">
       <li>Menjalankan layar kiosk daemon (<code>/display</code>) sebagai gerbang otentikasi fisik.</li>
       <li>Memantau papan monitor inventaris (alat aktif dipinjam, rusak, atau tersedia).</li>
       <li>Mengelola master data inventaris (tambah, edit kategori, cetak label barcode).</li>
@@ -249,91 +249,95 @@ style: |
 ---
 
 <!-- SLIDE 4: ANATOMI ANTARMUKA PENGGUNA -->
-<span class="badge">[03] MODUL ANTARMUKA</span>
+<span class="badge">03 &middot; MODUL ANTARMUKA</span>
 
 # ADA APA SAJA DI DALAM SISTEM?
 ### Empat Modul Antarmuka Utama yang Berinteraksi Langsung dengan Pengguna
 
 <div class="grid-4">
-  <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; color: #000000;">[MODUL 1]</div>
-    <div style="font-size: 25px; font-weight: 700; margin: 4px 0;">Kiosk Display</div>
-    <div style="font-size: 26px; color: #64748b; font-family: monospace;">Route: /display</div>
-    <div style="font-size: 22px; color: #334155; margin-top: 6px; line-height: 1.4;">
-      Layar publik monitor lab menampilkan QR token dinamis berotasi otomatis setiap 60 detik.
-    </div>
+  <div class="card" style="padding: 12px 14px;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #000000;"><strong>MODUL 1</strong></div>
+    <div style="font-size: 14.5px; font-weight: 700; margin: 2px 0;">Kiosk Display</div>
+    <div style="font-size: 12px; color: #64748b; font-family: monospace; margin-bottom: 6px;">Route: /display</div>
+    <ul style="font-size: 12.5px; color: #334155; margin: 0; padding-left: 16px; line-height: 1.35;">
+      <li>Layar publik monitor lab.</li>
+      <li>Rotasi QR token tiap 60 detik.</li>
+    </ul>
   </div>
 
-  <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; color: #000000;">[MODUL 2]</div>
-    <div style="font-size: 25px; font-weight: 700; margin: 4px 0;">Mobile Gateway</div>
-    <div style="font-size: 26px; color: #64748b; font-family: monospace;">Route: /scan</div>
-    <div style="font-size: 22px; color: #334155; margin-top: 6px; line-height: 1.4;">
-      Landing page paska pemindaian. Memvalidasi token sesi dan menyajikan 2 tombol opsi utama.
-    </div>
+  <div class="card" style="padding: 12px 14px;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #000000;"><strong>MODUL 2</strong></div>
+    <div style="font-size: 14.5px; font-weight: 700; margin: 2px 0;">Mobile Gateway</div>
+    <div style="font-size: 12px; color: #64748b; font-family: monospace; margin-bottom: 6px;">Route: /scan</div>
+    <ul style="font-size: 12.5px; color: #334155; margin: 0; padding-left: 16px; line-height: 1.35;">
+      <li>Landing page scan ponsel.</li>
+      <li>Verifikasi token & 2 menu utama.</li>
+    </ul>
   </div>
 
-  <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; color: #000000;">[MODUL 3]</div>
-    <div style="font-size: 25px; font-weight: 700; margin: 4px 0;">Formulir Interaktif</div>
-    <div style="font-size: 26px; color: #64748b; font-family: monospace;">/form/borrow & return</div>
-    <div style="font-size: 22px; color: #334155; margin-top: 6px; line-height: 1.4;">
-      Input form data peminjam, pemilihan aset berkategori, dan verifikasi pencocokan NPM.
-    </div>
+  <div class="card" style="padding: 12px 14px;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #000000;"><strong>MODUL 3</strong></div>
+    <div style="font-size: 14.5px; font-weight: 700; margin: 2px 0;">Form Interaktif</div>
+    <div style="font-size: 12px; color: #64748b; font-family: monospace; margin-bottom: 6px;">/form/borrow & return</div>
+    <ul style="font-size: 12.5px; color: #334155; margin: 0; padding-left: 16px; line-height: 1.35;">
+      <li>Input formulir peminjam.</li>
+      <li>Validasi NPM & kunci aset.</li>
+    </ul>
   </div>
 
-  <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; color: #000000;">[MODUL 4]</div>
-    <div style="font-size: 25px; font-weight: 700; margin: 4px 0;">Katalog & Admin</div>
-    <div style="font-size: 26px; color: #64748b; font-family: monospace;">/cek-alat & /admin</div>
-    <div style="font-size: 22px; color: #334155; margin-top: 6px; line-height: 1.4;">
-      Pencarian stok alat real-time untuk mahasiswa dan dashboard analitik lengkap untuk laboran.
-    </div>
+  <div class="card" style="padding: 12px 14px;">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #000000;"><strong>MODUL 4</strong></div>
+    <div style="font-size: 14.5px; font-weight: 700; margin: 2px 0;">Katalog & Admin</div>
+    <div style="font-size: 12px; color: #64748b; font-family: monospace; margin-bottom: 6px;">/cek-alat & /admin</div>
+    <ul style="font-size: 12.5px; color: #334155; margin: 0; padding-left: 16px; line-height: 1.35;">
+      <li>Pencarian stok alat publik.</li>
+      <li>Dashboard analitik laboran.</li>
+    </ul>
   </div>
 </div>
 
-<div class="card card-highlight" style="margin-top: 14px; padding: 10px 14px;">
-  <div style="font-size: 22px; color: #1e293b;">
-    <strong>Catatan Teknis:</strong> Desain antarmuka dibuat responsif dan ringan (tanpa dependensi framework berat) agar mahasiswa dengan sinyal lab minim tetap dapat memuat form dalam waktu &lt; 1.5 detik.
-  </div>
-</div>
+
 
 ---
 
 <!-- SLIDE 5: USER JOURNEY 1 (ALUR PEMINJAMAN) -->
-<span class="badge">[04] USER JOURNEY</span>
+<span class="badge">04 &middot; USER JOURNEY</span>
 
 # GIMANA CARA PINJAM ALAT? (BORROW FLOW)
 ### Alur 4 Langkah Pengguna Mahasiswa dari Layar Fisik Lab hingga Sukses Meminjam
 
 <div class="grid-2">
   <div>
-    <div class="card card-highlight" style="margin-bottom: 10px;">
-      <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700;">LANGKAH 1: PINDAI QR KIOSK LAB</div>
-      <div style="font-size: 23px; color: #334155; margin-top: 2px;">
-        Mahasiswa membuka kamera smartphone dan memindai QR code di monitor anjungan <code>/display</code>. Kamera mengarahkan browser ke <code>/scan?token=...</code>.
-      </div>
+    <div class="card card-highlight" style="margin-bottom: 12px; padding: 12px 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; margin-bottom: 4px;"><strong>LANGKAH 1 &middot; PINDAI QR KIOSK LAB</strong></div>
+      <ul style="font-size: 13.5px; color: #334155; margin: 0; padding-left: 20px; line-height: 1.4;">
+        <li>Pindai kode QR berotasi pada layar anjungan fisik lab (<code>/display</code>).</li>
+        <li>Browser smartphone otomatis diarahkan ke tautan sesi (<code>/scan?token=...</code>).</li>
+      </ul>
     </div>
-    <div class="card" style="margin-bottom: 10px;">
-      <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700;">LANGKAH 2: PILIH OPSI PINJAM ALAT</div>
-      <div style="font-size: 23px; color: #334155; margin-top: 2px;">
-        Sistem memverifikasi validitas token sesi. Mahasiswa mengetuk tombol hitam kontras bertuliskan <strong>"Pinjam Alat Laboratorium"</strong>.
-      </div>
+    <div class="card" style="margin-bottom: 12px; padding: 12px 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; margin-bottom: 4px;"><strong>LANGKAH 2 &middot; PILIH OPSI PINJAM ALAT</strong></div>
+      <ul style="font-size: 13.5px; color: #334155; margin: 0; padding-left: 20px; line-height: 1.4;">
+        <li>Sistem memverifikasi masa aktif token sesi gerbang lab (TTL).</li>
+        <li>Mahasiswa mengetuk tombol utama bertuliskan <strong>"Pinjam Alat"</strong>.</li>
+      </ul>
     </div>
   </div>
 
   <div>
-    <div class="card" style="margin-bottom: 10px;">
-      <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700;">LANGKAH 3: ISI FORM & PILIH BARANG</div>
-      <div style="font-size: 23px; color: #334155; margin-top: 2px;">
-        Mengisi NPM (11 digit), Nama, Prodi, Mata Kuliah, Dosen, estimasi jam selesai, dan memilih aset yang berstatus <code>available</code>.
-      </div>
+    <div class="card" style="margin-bottom: 12px; padding: 12px 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; margin-bottom: 4px;"><strong>LANGKAH 3 &middot; ISI FORM & PILIH BARANG</strong></div>
+      <ul style="font-size: 13.5px; color: #334155; margin: 0; padding-left: 20px; line-height: 1.4;">
+        <li>Isi identitas: NPM (11 digit), Nama, Prodi, Mata Kuliah, dan Dosen.</li>
+        <li>Pilih inventaris alat lab yang berstatus masih tersedia (<code>available</code>).</li>
+      </ul>
     </div>
-    <div class="card card-subtle" style="margin-bottom: 10px;">
-      <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700;">LANGKAH 4: KONFIRMASI & STATUS AKTIF</div>
-      <div style="font-size: 23px; color: #334155; margin-top: 2px;">
-        Klik submit &rarr; API mengunci aset &rarr; Muncul notifikasi sukses dengan stempel waktu &rarr; Status aset di sistem langsung berubah menjadi <code>borrowed</code>.
-      </div>
+    <div class="card card-subtle" style="margin-bottom: 12px; padding: 12px 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; margin-bottom: 4px;"><strong>LANGKAH 4 &middot; KONFIRMASI & STATUS AKTIF</strong></div>
+      <ul style="font-size: 13.5px; color: #334155; margin: 0; padding-left: 20px; line-height: 1.4;">
+        <li>Kirim formulir &rarr; API mengunci transaksi dan mencatat stempel waktu.</li>
+        <li>Status alat di sistem seketika terkunci dan berubah menjadi <code>borrowed</code>.</li>
+      </ul>
     </div>
   </div>
 </div>
@@ -341,39 +345,43 @@ style: |
 ---
 
 <!-- SLIDE 6: USER JOURNEY 2 (ALUR PENGEMBALIAN) -->
-<span class="badge">[05] USER JOURNEY</span>
+<span class="badge">05 &middot; USER JOURNEY</span>
 
 # GIMANA CARA KEMBALIKAN ALAT? (RETURN FLOW)
 ### Mekanisme Validasi Mandiri untuk Menghindari Kesalahan Identitas Pengembali
 
 <div class="grid-2">
   <div>
-    <div class="card card-highlight" style="margin-bottom: 10px;">
-      <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700;">LANGKAH 1: PINDAI ULANG DI LAB</div>
-      <div style="font-size: 23px; color: #334155; margin-top: 2px;">
-        Saat praktikum selesai, mahasiswa memindai kembali monitor lab untuk membuktikan kehadiran fisik di laboratorium yang bersangkutan.
-      </div>
+    <div class="card card-highlight" style="margin-bottom: 12px; padding: 12px 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; margin-bottom: 4px;"><strong>LANGKAH 1 &middot; PINDAI ULANG DI LAB</strong></div>
+      <ul style="font-size: 13.5px; color: #334155; margin: 0; padding-left: 20px; line-height: 1.4;">
+        <li>Mahasiswa memindai kembali monitor lab paska praktikum selesai.</li>
+        <li>Membuktikan kehadiran fisik mahasiswa di ruang laboratorium.</li>
+      </ul>
     </div>
-    <div class="card" style="margin-bottom: 10px;">
-      <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700;">LANGKAH 2: PILIH OPSI PENGEMBALIAN</div>
-      <div style="font-size: 23px; color: #334155; margin-top: 2px;">
-        Mengetuk tombol <strong>"Kembalikan Alat"</strong> &rarr; Muncul daftar alat-alat yang saat itu berstatus sedang dipinjam (<code>borrowed</code>).
-      </div>
+    <div class="card" style="margin-bottom: 12px; padding: 12px 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; margin-bottom: 4px;"><strong>LANGKAH 2 &middot; PILIH OPSI PENGEMBALIAN</strong></div>
+      <ul style="font-size: 13.5px; color: #334155; margin: 0; padding-left: 20px; line-height: 1.4;">
+        <li>Mengetuk tombol menu <strong>"Kembalikan Alat"</strong>.</li>
+        <li>Sistem menampilkan daftar seluruh alat yang sedang aktif dipinjam.</li>
+      </ul>
     </div>
   </div>
 
   <div>
-    <div class="card" style="margin-bottom: 10px;">
-      <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700;">LANGKAH 3: INPUT VERIFIKASI NPM</div>
-      <div style="font-size: 23px; color: #334155; margin-top: 2px;">
-        Pilih alat yang dibawa &rarr; Mahasiswa wajib mengetikkan NPM peminjam asli. Sistem memvalidasi apakah NPM cocok dengan transaksi awal.
-      </div>
+    <div class="card" style="margin-bottom: 12px; padding: 12px 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; margin-bottom: 4px;"><strong>LANGKAH 3 &middot; INPUT VERIFIKASI NPM</strong></div>
+      <ul style="font-size: 13.5px; color: #334155; margin: 0; padding-left: 20px; line-height: 1.4;">
+        <li>Pilih aset yang dikembalikan dan ketikkan 11 digit NPM peminjam.</li>
+        <li>Sistem mencocokkan identitas dengan data transaksi awal secara ketat.</li>
+      </ul>
     </div>
-    <div class="card card-subtle" style="margin-bottom: 10px;">
-      <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700;">LANGKAH 4: CLOSE TRANSACTION</div>
-      <div style="font-size: 23px; color: #334155; margin-top: 2px;">
-        Konfirmasi diterima &rarr; Transaksi ditutup &rarr; Aset otomatis kembali berstatus <code>available</code> dan dapat dipinjam oleh mahasiswa lain.
-      </div>
+    <div class="card card-subtle" style="margin-bottom: 12px; padding: 12px 16px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; margin-bottom: 4px;"><strong>LANGKAH 4 &middot; CLOSE TRANSACTION</strong></div>
+      <ul style="font-size: 13.5px; color: #334155; margin: 0; padding-left: 20px; line-height: 1.4;">
+        <li>Transaksi peminjaman ditutup dan waktu kembali aktual tercatat.</li>
+        <li>Status aset otomatis pulih menjadi <code>available</code> untuk sesi berikutnya.</li>
+      </ul>
     </div>
   </div>
 </div>
@@ -381,39 +389,42 @@ style: |
 ---
 
 <!-- SLIDE 7: PENGALAMAN PENGGUNA LABORAN -->
-<span class="badge">[06] USER EXPERIENCE</span>
+<span class="badge">06 &middot; USER EXPERIENCE</span>
 
 # DARI SUDUT PANDANG LABORAN
 ### Kemudahan Pengawasan, Audit Log, dan Manajemen Inventaris Secara Terpusat
 
 <div class="grid-3">
   <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; color: #000000;">[FITUR 1]</div>
-    <div style="font-size: 26px; font-weight: 700; margin: 4px 0;">Monitoring Real-Time</div>
-    <div style="font-size: 22px; color: #475569; line-height: 1.45;">
-      Laboran melihat tabel inventaris dengan badge status instan: berapa aset yang ada di rak, siapa yang membawa, dan sisa waktu peminjaman.
-    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 14.5px; font-weight: 700; color: #000000;"><strong>FITUR 1</strong></div>
+    <div style="font-size: 15px; font-weight: 700; margin: 2px 0 6px 0;">Monitoring Real-Time</div>
+    <ul style="font-size: 13px; color: #475569; margin: 0; padding-left: 18px; line-height: 1.45;">
+      <li>Pantau status aset di rak secara langsung (tersedia / dipinjam / rusak).</li>
+      <li>Lacak identitas mahasiswa peminjam dan estimasi jam selesai praktikum.</li>
+    </ul>
   </div>
 
   <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; color: #000000;">[FITUR 2]</div>
-    <div style="font-size: 26px; font-weight: 700; margin: 4px 0;">Audit Log Sirkulasi</div>
-    <div style="font-size: 22px; color: #475569; line-height: 1.45;">
-      Seluruh riwayat peminjaman tercatat abadi di PostgreSQL Supabase, lengkap dengan stempel waktu detik, nama peminjam, dosen, dan kondisi alat.
-    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 14.5px; font-weight: 700; color: #000000;"><strong>FITUR 2</strong></div>
+    <div style="font-size: 15px; font-weight: 700; margin: 2px 0 6px 0;">Audit Log Sirkulasi</div>
+    <ul style="font-size: 13px; color: #475569; margin: 0; padding-left: 18px; line-height: 1.45;">
+      <li>Riwayat transaksi tersimpan abadi di Supabase PostgreSQL.</li>
+      <li>Mencakup stempel waktu detik, nama dosen pengampu, dan kondisi alat.</li>
+    </ul>
   </div>
 
   <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; color: #000000;">[FITUR 3]</div>
-    <div style="font-size: 26px; font-weight: 700; margin: 4px 0;">Label Barcode Generator</div>
-    <div style="font-size: 22px; color: #475569; line-height: 1.45;">
-      Modul cetak label fisik otomatis langsung dari dashboard untuk ditempelkan pada wadah atau fisik perangkat keras laboratorium.
-    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 14.5px; font-weight: 700; color: #000000;"><strong>FITUR 3</strong></div>
+    <div style="font-size: 15px; font-weight: 700; margin: 2px 0 6px 0;">Label Barcode Generator</div>
+    <ul style="font-size: 13px; color: #475569; margin: 0; padding-left: 18px; line-height: 1.45;">
+      <li>Modul cetak label barcode fisik otomatis dari dashboard lab.</li>
+      <li>Ditempelkan pada wadah atau fisik perangkat keras laboratorium.</li>
+    </ul>
   </div>
 </div>
 
 <div class="card card-subtle" style="margin-top: 14px;">
-  <div style="font-size: 23px; color: #1e293b;">
+  <div style="font-size: 14.5px; color: #1e293b;">
     <strong>Proteksi Keamanan:</strong> Rute dashboard dilindungi session token middleware. Akses konfigurasi database dan settingan lab dibatasi dengan protokol <em>Row Level Security (RLS)</em>.
   </div>
 </div>
@@ -421,7 +432,7 @@ style: |
 ---
 
 <!-- SLIDE 8: KENAPA LENTERA MENARIK DIUJI -->
-<span class="badge badge-black">[07] JUSTIFIKASI QA</span>
+<span class="badge badge-black">07 &middot; JUSTIFIKASI QA</span>
 
 # KENAPA LENTERA COCOK UNTUK PPL?
 ### Karakteristik Arsitektur yang Menantang dan Kaya Skenario Uji Kualitas
@@ -461,56 +472,52 @@ style: |
 ---
 
 <!-- SLIDE 9: PEMBAGIAN TUGAS & SPRINT ESTAFET -->
-<span class="badge">[08] MANAJEMEN TIM</span>
+<span class="badge">08 &middot; MANAJEMEN TIM</span>
 
 # SUSUNAN TIM & SPRINT ESTAFET
 ### Alur Estafet Terstruktur Menjamin Kualitas Pengujian Tanpa Waktu Menganggur (Idle)
 
 <div class="grid-3">
   <div class="card card-highlight">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; color: #000000;">TAHAP 1: INISIASI (MAKS KAMIS)</div>
-    <div style="font-size: 25px; font-weight: 700; margin: 4px 0;">Mu'adz Hudzaifah</div>
-    <div style="font-size: 21px; color: #475569; line-height: 1.45;">
-      &bull; Master Test Plan (IEEE 829)<br>
-      &bull; Bedah arsitektur modul sasaran<br>
-      &bull; Automasi API & skrip konkurensi<br>
-      &bull; Setup isolasi branch <code>qa/ppl-audit</code>
-    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #000000;"><strong>TAHAP 1 &middot; ARSITEKTUR & INISIASI</strong></div>
+    <div style="font-size: 15.5px; font-weight: 700; margin: 4px 0;">Mu'adz Hudzaifah</div>
+    <ul style="font-size: 13.5px; color: #334155; margin: 4px 0 0 16px; padding: 0; line-height: 1.45;">
+      <li>Master Test Plan (IEEE 829)</li>
+      <li>Bedah arsitektur modul sasaran</li>
+      <li>Automasi API & skrip konkurensi</li>
+      <li>Setup branch <code>qa/ppl-audit</code></li>
+    </ul>
   </div>
 
   <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; color: #000000;">TAHAP 2: LOGIKA (MAKS SABTU)</div>
-    <div style="font-size: 25px; font-weight: 700; margin: 4px 0;">Zahraan Dzakii Ts.</div>
-    <div style="font-size: 21px; color: #475569; line-height: 1.45;">
-      &bull; Sequence & Activity Diagram<br>
-      &bull; White Box Basis Path Testing<br>
-      &bull; Analisis Cyclomatic Complexity V(G)<br>
-      &bull; Skema mock data & integritas DB
-    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #000000;"><strong>TAHAP 2 &middot; ANALISIS & LOGIKA</strong></div>
+    <div style="font-size: 15.5px; font-weight: 700; margin: 4px 0;">Zahraan Dzakii Ts.</div>
+    <ul style="font-size: 13.5px; color: #334155; margin: 4px 0 0 16px; padding: 0; line-height: 1.45;">
+      <li>Sequence & Activity Diagram</li>
+      <li>White Box Basis Path Testing</li>
+      <li>Analisis Cyclomatic Complexity V(G)</li>
+      <li>Skema mock data & integritas DB</li>
+    </ul>
   </div>
 
   <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; color: #000000;">TAHAP 3: VALIDASI (MAKS SENIN)</div>
-    <div style="font-size: 25px; font-weight: 700; margin: 4px 0;">Syifa Amelia</div>
-    <div style="font-size: 21px; color: #475569; line-height: 1.45;">
-      &bull; Matriks Kasus Uji Black Box (BVA)<br>
-      &bull; Eksekusi pengujian manual di Lentera<br>
-      &bull; Pencatatan bug / defect log<br>
-      &bull; User Acceptance Testing (SUS scale)
-    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; color: #000000;"><strong>TAHAP 3 &middot; VALIDASI & EKSEKUSI</strong></div>
+    <div style="font-size: 15.5px; font-weight: 700; margin: 4px 0;">Syifa Amelia</div>
+    <ul style="font-size: 13.5px; color: #334155; margin: 4px 0 0 16px; padding: 0; line-height: 1.45;">
+      <li>Matriks Kasus Uji Black Box (BVA)</li>
+      <li>Eksekusi pengujian manual antarmuka</li>
+      <li>Pencatatan tiket bug di GitHub Issues</li>
+      <li>User Acceptance Testing (SUS scale)</li>
+    </ul>
   </div>
 </div>
 
-<div class="card" style="margin-top: 12px; padding: 10px 14px;">
-  <div style="font-size: 22px; color: #334155;">
-    <strong>Sinkronisasi Pra-Kelas:</strong> Setiap Selasa 08.30 WIB tim melakukan dry-run 30 menit sebelum presentasi pukul 09.00 WIB di hadapan dosen pengampu.
-  </div>
-</div>
+
 
 ---
 
 <!-- SLIDE 10: ROADMAP PENGUJIAN 1 SEMESTER -->
-<span class="badge">[09] RENCANA KERJA</span>
+<span class="badge">09 &middot; RENCANA KERJA</span>
 
 # MILESTONE PENGUJIAN 1 SEMESTER
 ### Pemetaan Materi Perkuliahan Dosen ke Deliverable Nyata Tim Penguji
@@ -555,31 +562,11 @@ style: |
 ---
 
 <!-- SLIDE 11: PENUTUP & QnA -->
-<span class="badge badge-black">[10] KESIMPULAN & TANYA JAWAB</span>
+<span class="badge badge-black">SESI TANYA JAWAB</span>
 
 # TERIMA KASIH
-### Kami Siap Mendiskusikan Rencana Pengujian Platform Lentera
 
-<div class="grid-2" style="margin-top: 20px;">
-  <div class="card card-highlight">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: #000000; margin-bottom: 6px;">KOMITMEN KELOMPOK 1</div>
-    <div style="font-size: 23px; line-height: 1.6; color: #334155;">
-      Sistem Lentera dipilih karena merepresentasikan sistem riil yang memiliki tantangan konkurensi, keamanan sesi fisik, dan alur deterministik. Seluruh audit pengujian akan didokumentasikan secara ilmiah dan dapat ditelusuri.
-    </div>
-  </div>
-
-  <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: #000000; margin-bottom: 6px;">ARTEFAK PENGUJIAN</div>
-    <div style="font-size: 23px; line-height: 1.6; color: #334155;">
-      &bull; <strong>Repositori:</strong> <code>github.com/openc-dev/lentera</code><br>
-      &bull; <strong>Branch Audit:</strong> <code>qa/ppl-audit</code><br>
-      &bull; <strong>Master Test Plan:</strong> <code>TEST_PLAN.md</code><br>
-      &bull; <strong>Slide Presentasi:</strong> Format Marp HTML & PDF
-    </div>
-  </div>
-</div>
-
-<div style="margin-top: 24px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 23px; color: #64748b;">
-  Sesi Tanya Jawab Dibuka
+<div style="margin-top: 48px; font-size: 18px; color: #475569; line-height: 1.6;">
+  Sesi tanya jawab dibuka untuk evaluasi dan diskusi rencana pengujian sistem Lentera.
 </div>
 
