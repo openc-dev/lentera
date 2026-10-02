@@ -3,7 +3,7 @@ marp: true
 theme: default
 paginate: true
 size: 16:9
-header: 'PENGUJIAN PERANGKAT LUNAK &middot; D4 TEKNOLOGI REKAYASA MULTIMEDIA'
+header: 'PENGUJIAN PERANGKAT LUNAK &middot; TEKNOLOGI REKAYASA MULTIMEDIA'
 footer: 'SISTEM SASARAN PENGUJIAN: LENTERA &middot; KELOMPOK 1 &middot; 2026'
 style: |
   section {
@@ -161,16 +161,16 @@ style: |
 
 <div class="grid-2" style="margin-top: 14px;">
   <div class="card card-highlight">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #000000; font-weight: 700; margin-bottom: 4px;">[>] TIM PENGUJI (KELOMPOK 1)</div>
-    <div style="font-size: 14px; font-weight: 700; color: #000000;">D4 Teknologi Rekayasa Multimedia &middot; Kelas TRM3A1</div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #000000; font-weight: 700; margin-bottom: 4px;">TIM PENGUJI (KELOMPOK 1)</div>
+    <div style="font-size: 14px; font-weight: 700; color: #000000;">Teknologi Rekayasa Multimedia &middot; Kelas TRM3A1</div>
     <div style="font-size: 12.5px; color: #475569; margin-top: 6px; line-height: 1.5;">
-      &bull; <strong>Mu'adz Hudzaifah (24903460014)</strong>: Lead Test Architect & Automation<br>
-      &bull; <strong>Zahraan Dzakii Ts. (24903460011)</strong>: Senior White-Box Systems Analyst<br>
-      &bull; <strong>Syifa Amelia (24903460001)</strong>: Lead Functional QA & UAT Specialist
+      &bull; <strong>Mu'adz Hudzaifah (24903460014)</strong>: Perancang Arsitektur Pengujian & Automasi<br>
+      &bull; <strong>Zahraan Dzakii Ts. (24903460011)</strong>: Analis Alur Sistem & White-Box<br>
+      &bull; <strong>Syifa Amelia (24903460001)</strong>: Analis Pengujian Fungsional & Advokat Pengguna
     </div>
   </div>
   <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #000000; font-weight: 700; margin-bottom: 4px;">[>] PARAMETER PERKULIAHAN</div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #000000; font-weight: 700; margin-bottom: 4px;">PARAMETER PERKULIAHAN</div>
     <div style="font-size: 12.5px; line-height: 1.55; color: #334155;">
       &bull; <strong>Mata Kuliah:</strong> Pengujian Perangkat Lunak (KB260004 &middot; 2 SKS)<br>
       &bull; <strong>Dosen Pengampu:</strong> Charmiyanti Nurkentjana Aju, S.Kom., M.Kom.<br>
@@ -181,7 +181,7 @@ style: |
 </div>
 
 <div style="margin-top: 16px; font-size: 11.5px; font-family: 'JetBrains Mono', monospace; color: #64748b;">
-  Politeknik Digital Boash Indonesia &middot; Departemen Teknologi Informasi &middot; Semester Ganjil 2026/2027
+  Universitas Boash &middot; Semester Ganjil 2026/2027
 </div>
 
 ---
@@ -567,23 +567,24 @@ style: |
 
 <div class="grid-2" style="margin-top: 20px;">
   <div class="card card-highlight">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #000000; margin-bottom: 6px;">[>] KOMITMEN KELOMPOK 1</div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #000000; margin-bottom: 6px;">KOMITMEN KELOMPOK 1</div>
     <div style="font-size: 13px; line-height: 1.6; color: #334155;">
       Sistem Lentera dipilih karena merepresentasikan sistem riil yang memiliki tantangan konkurensi, keamanan sesi fisik, dan alur deterministik. Seluruh audit pengujian akan didokumentasikan secara ilmiah dan dapat ditelusuri.
     </div>
   </div>
 
   <div class="card">
-    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #000000; margin-bottom: 6px;">[>] ARTEFAK PENGUJIAN</div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #000000; margin-bottom: 6px;">ARTEFAK PENGUJIAN</div>
     <div style="font-size: 13px; line-height: 1.6; color: #334155;">
       &bull; <strong>Repositori:</strong> <code>github.com/openc-dev/lentera</code><br>
       &bull; <strong>Branch Audit:</strong> <code>qa/ppl-audit</code><br>
-      &bull; <strong>Dokumen Proposal:</strong> <code>proposal-pengujian-lentera.pdf</code><br>
+      &bull; <strong>Master Test Plan:</strong> <code>TEST_PLAN.md</code><br>
       &bull; <strong>Slide Presentasi:</strong> Format Marp HTML & PDF
     </div>
   </div>
 </div>
 
 <div style="margin-top: 24px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #64748b;">
-  Sesi Tanya Jawab Dibuka &middot; Dosen Pengampu: Charmiyanti Nurkentjana Aju, S.Kom., M.Kom.
+  Sesi Tanya Jawab Dibuka
 </div>
+

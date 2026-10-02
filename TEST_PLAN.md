@@ -3,7 +3,7 @@
 > **Branch Audit:** `qa/ppl-audit`  
 > **Target Repositori:** https://github.com/openc-dev/lentera  
 > **Mata Kuliah:** Pengujian Perangkat Lunak (KB260004 &middot; 2 SKS)  
-> **Program Studi:** D4 Teknologi Rekayasa Multimedia (TRM3A1) &middot; TA 2026/2027  
+> **Program Studi:** Teknologi Rekayasa Multimedia (TRM3A1) &middot; TA 2026/2027  
 > **Dosen Pengampu:** Charmiyanti Nurkentjana Aju, S.Kom., M.Kom.  
 
 ---
