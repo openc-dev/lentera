@@ -54,6 +54,7 @@ lentera/ (Branch: qa/ppl-audit)
 ## 3. LINGKUNGAN PENGUJIAN STAGING (VERCEL & SUPABASE)
 
 Pengujian fungsional pengguna manual dilakukan pada lingkungan pratinjau (*preview deployment*) terisolasi:
+- **Tautan Pratinjau Staging:** [https://lentera-jhw0vljp3-mu-adz-hudzaifah-s-projects.vercel.app](https://lentera-jhw0vljp3-mu-adz-hudzaifah-s-projects.vercel.app)
 - **Aplikasi Web Sasaran:** Next.js 16 (React 19, TypeScript, Tailwind CSS v4)
 - **Basis Data:** Supabase PostgreSQL (Row Level Security & Atomic RPC)
 - **Pencatatan Masalah:** GitHub Issues Tracker (`https://github.com/openc-dev/lentera/issues`)
