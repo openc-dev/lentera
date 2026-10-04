@@ -1,0 +1,71 @@
+name: "Laporan Cacat / Bug Sistem (QA Report)"
+description: "Formulir interaktif pelaporan bug fungsional dan anomali antarmuka Lentera."
+title: "[BUG]: "
+labels: ["bug", "qa-audit"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Formulir Pengujian Mutu Sistem Lentera (QA Audit)
+        Terima kasih sudah membantu menguji sistem Lentera! Silakan isi kolom-kolom di bawah ini untuk mencatat temuan bug atau anomali yang kamu dapatkan.
+  - type: dropdown
+    id: severity
+    attributes:
+      label: "Tingkat Keparahan (Severity)"
+      description: "Pilih seberapa parah dampak kendala ini terhadap fungsi aplikasi."
+      options:
+        - "Tinggi (Fitur macet total / data korup / tidak bisa dipakai)"
+        - "Sedang (Fitur jalan tetapi salah hasil atau validasi lolos)"
+        - "Rendah (Tampilan bergeser, teks typo, atau warna janggal)"
+    validations:
+      required: true
+  - type: input
+    id: feature_page
+    attributes:
+      label: "Halaman atau Fitur yang Sedang Diuji"
+      description: "Sebutkan URL halaman atau nama menu yang sedang dibuka."
+      placeholder: "Contoh: /form/borrow atau /scan atau /cek-alat"
+    validations:
+      required: true
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: "Langkah-Langkah Menemukan Masalah (Steps to Reproduce)"
+      description: "Tuliskan langkah-langkah yang kamu lakukan secara berurutan hingga masalah muncul."
+      placeholder: |
+        1. Buka halaman /form/borrow
+        2. Ketik NPM dengan format huruf
+        3. Klik tombol 'Lanjut Pinjam'
+    validations:
+      required: true
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: "Apa yang Terjadi Sekarang? (Actual Behavior)"
+      description: "Jelaskan apa yang sebenarnya terjadi pada layar."
+      placeholder: "Contoh: Form tetap berhasil tersimpan dan data masuk, padahal NPM tidak valid."
+    validations:
+      required: true
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: "Apa yang Seharusnya Terjadi? (Expected Behavior)"
+      description: "Menurut kamu atau spesifikasi lab, bagaimana seharusnya sistem merespons?"
+      placeholder: "Contoh: Sistem wajib menolak dan memunculkan tulisan peringatan merah 'NPM wajib 11 digit angka'."
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot_evidence
+    attributes:
+      label: "Bukti Tangkapan Layar (Screenshot)"
+      description: "Tarik (drag-and-drop) atau tempel (Ctrl+V) foto screenshot di kotak ini."
+      placeholder: "Tempel screenshot di sini..."
+  - type: checkboxes
+    id: reporter_confirmation
+    attributes:
+      label: "Konfirmasi Pelapor"
+      options:
+        - label: "Saya sudah memastikan masalah ini dapat diulang kembali (*reproducible*)."
+          required: true
+        - label: "Pengujian dilakukan pada lingkungan staging Lentera (Vercel Preview)."
+          required: true
