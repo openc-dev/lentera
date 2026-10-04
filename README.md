@@ -47,7 +47,7 @@ lentera/ (Branch: qa/ppl-audit)
 - **[TEST_PLAN.md](./TEST_PLAN.md)**: Rencana pengujian lengkap 13 pertemuan, profil sistem, 4 bisnis proses, dan strategi pengujian.
 - **[Laporan Pertemuan 3](./reports/pertemuan-03/LAPORAN_P3.md)**: Ringkasan eksekutif penetapan platform Lentera.
 - **[Slide Presentasi Pertemuan 3](./reports/pertemuan-03/SLIDES_P3.md)**: Berkas slide 11 halaman untuk pemaparan di hadapan dosen pengampu.
-- **[Form Lapor Cacat (Bug Report)](./.github/ISSUE_TEMPLATE/bug_report.md)**: Template pelaporan temuan bug bagi penguji fungsional.
+- **[Form Lapor Cacat (GitHub Issue Form)](https://github.com/openc-dev/lentera/issues/new?template=bug_report.yml)**: Formulir interaktif resmi pelaporan temuan bug bagi penguji fungsional.
 
 ---
 
