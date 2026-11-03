@@ -1,0 +1,86 @@
+flowchart LR
+    %% ─────────────────────────────────────────────────────────────
+    %% DEFINISI AKTOR SISTEM (ACTORS)
+    %% ─────────────────────────────────────────────────────────────
+    subgraph ACTORS ["Aktor Sistem"]
+        M["Mahasiswa (Peminjam Mandiri)"]
+        K["Anjungan Kiosk Lab (Monitor Fisik)"]
+        L["Laboran (Admin Lab)"]
+    end
+
+    %% ─────────────────────────────────────────────────────────────
+    %% BATASAN SISTEM (SYSTEM BOUNDARY)
+    %% ─────────────────────────────────────────────────────────────
+    subgraph LENTERA ["System Boundary: Sistem Lentera (Lab Asset Lending & Tracking)"]
+        %% PAKET 1: PRESENSI FISIK & GATEWAY
+        subgraph PKG_GATEWAY ["Sub-sistem Presensi Fisik & Gateway"]
+            UC1(["UC-01: Tampilkan QR Gateway Dinamis"])
+            UC2(["UC-02: Rotasi Token Berkala (TTL 60s)"])
+            UC3(["UC-03: Pindai QR Gateway Lab"])
+            UC4(["UC-04: Validasi Masa Aktif Token (TTL Guard)"])
+        end
+
+        %% PAKET 2: LAYANAN MANDIRI MAHASISWA
+        subgraph PKG_CLIENT ["Sub-sistem Transaksi Mandiri (Self-Service)"]
+            UC5(["UC-05: Cek Katalog & Status Ketersediaan Alat"])
+            UC6(["UC-06: Melakukan Peminjaman Mandiri"])
+            UC7(["UC-07: Validasi Format Identitas & Matkul"])
+            UC8(["UC-08: Kunci Status Aset secara Atomik (Concurrency Lock)"])
+            UC9(["UC-09: Terbitkan Bukti Digital Peminjaman"])
+
+            UC10(["UC-10: Melakukan Pengembalian Mandiri"])
+            UC11(["UC-11: Verifikasi NPM Peminjam Asli & Transaksi Aktif"])
+            UC12(["UC-12: Buka Kunci Status Aset ('borrowed' -> 'available')"])
+            UC13(["UC-13: Terbitkan Bukti Digital Pengembalian"])
+        end
+
+        %% PAKET 3: MANAJEMEN INVENTARIS & OPERASIONAL
+        subgraph PKG_ADMIN ["Sub-sistem Manajemen Inventaris & Operasional"]
+            UC14(["UC-14: Otentikasi Akun Laboran (Login/Logout)"])
+            UC15(["UC-15: Pantau Dasbor Sirkulasi Real-Time"])
+            UC16(["UC-16: Kelola Master Data Aset & Kategori"])
+            UC17(["UC-17: Cetak Label Fisik Barcode/QR Aset"])
+        end
+
+        %% PAKET 4: KONFIGURASI & KONTINJENSI
+        subgraph PKG_CONFIG ["Sub-sistem Konfigurasi & Kontinjensi"]
+            UC18(["UC-18: Kelola Pengaturan Sistem & Gateway"])
+            UC19(["UC-19: Sudo Override Transaksi Macet"])
+        end
+    end
+
+    %% ─────────────────────────────────────────────────────────────
+    %% ASOSIASI AKTOR KE USE CASE UTAMA
+    %% ─────────────────────────────────────────────────────────────
+    K --> UC1
+    K --> UC2
+    
+    M --> UC3
+    M --> UC5
+    M --> UC6
+    M --> UC10
+
+    L --> UC14
+    L --> UC15
+    L --> UC16
+    L --> UC17
+    L --> UC18
+    L --> UC19
+
+    %% ─────────────────────────────────────────────────────────────
+    %% RELASI <<INCLUDE>> (KEHARUSAN EKSEKUSI)
+    %% ─────────────────────────────────────────────────────────────
+    UC3 -.->|"<<include>>"| UC4
+    UC6 -.->|"<<include>>"| UC4
+    UC6 -.->|"<<include>>"| UC7
+    UC6 -.->|"<<include>>"| UC8
+
+    UC10 -.->|"<<include>>"| UC4
+    UC10 -.->|"<<include>>"| UC11
+    UC10 -.->|"<<include>>"| UC12
+
+    %% ─────────────────────────────────────────────────────────────
+    %% RELASI <<EXTEND>> (PERCABANGAN KONDISIONAL / HASIL)
+    %% ─────────────────────────────────────────────────────────────
+    UC9 -.->|"<<extend>>"| UC6
+    UC13 -.->|"<<extend>>"| UC10

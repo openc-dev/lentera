@@ -1,0 +1,70 @@
+flowchart TD
+    %% ─────────────────────────────────────────────────────────────
+    %% SUB-SISTEM 1: ANJUNGAN KIOSK LAB (GATEWAY SESSION CYCLE)
+    %% ─────────────────────────────────────────────────────────────
+    START_KIOSK(["Mulai Sesi Anjungan Lab (Kiosk Boot)"]) --> REQ_TOKEN["Proses Serverless: Inisiasi Sesi Kiosk"]
+    REQ_TOKEN --> GEN_TOKEN["Proses: Generate Token Dinamis (TTL = 60 Detik)"]
+    GEN_TOKEN --> DISP_QR[/"Display Monitor Lab: Tampilkan QR Gateway Dinamis"/]
+
+    %% SIKLUS ROTASI TOKEN OTOMATIS
+    DISP_QR --> TIMER_CHECK{"Decision: Timer >= 60 Detik?"}
+    TIMER_CHECK -- "Ya (Expired)" --> REQ_TOKEN
+    TIMER_CHECK -- "Tidak (Aktif)" --> WAIT_SCAN["Menunggu Pemindaian Mahasiswa..."]
+
+    %% ─────────────────────────────────────────────────────────────
+    %% SUB-SISTEM 2: CLIENT MOBILE GATEWAY GUARD
+    %% ─────────────────────────────────────────────────────────────
+    CAM_SCAN[/"Kamera Smartphone: Pindai QR Gateway"/] --> BROWSE_URL["Proses: Buka URL Endpoint Gateway (/scan)"]
+    DISP_QR -.->|Dipindai secara Fisik| CAM_SCAN
+    
+    BROWSE_URL --> CHECK_TTL{"Decision: Apakah Token Gateway Masih Berlaku?"}
+    CHECK_TTL -- "Tidak (Kedaluwarsa / Direct Access Ilegal)" --> ERR_TTL[/"Display HP: Peringatan 'Sesi Kedaluwarsa, Pindai Ulang Kiosk'"/]
+    ERR_TTL --> END_FAIL(["Sesi Selesai (Batal)"])
+
+    CHECK_TTL -- "Ya (Token Valid & Aktif)" --> MENU_SELECT[/"Display HP: Menu Pilihan Aksi (Peminjaman / Pengembalian)"/]
+
+    %% ─────────────────────────────────────────────────────────────
+    %% SUB-SISTEM 3: ALUR PEMINJAMAN MANDIRI (BORROWING TRANSACTION)
+    %% ─────────────────────────────────────────────────────────────
+    MENU_SELECT -- "Pilih Aksi Pinjam" --> FORM_BORROW[/"Manual Input HP: NPM (11 Digit), Nama, Matkul, Dosen, ID Aset"/]
+    FORM_BORROW --> SUBMIT_BORROW["Proses: Kirim Payload HTTP POST /api/borrow"]
+
+    SUBMIT_BORROW --> VAL_CLIENT{"Decision: Validasi Format Form (NPM Numerik & Field Lengkap)?"}
+    VAL_CLIENT -- "Format Tidak Valid" --> ERR_VAL[/"Display HP: Pesan Kesalahan Validasi Input"/]
+    ERR_VAL --> FORM_BORROW
+
+    VAL_CLIENT -- "Format Valid" --> ATOMIC_LOCK["Proses Backend: Atomic Transaction & Lock Status Aset"]
+    ATOMIC_LOCK <--> DB_ASSETS[("Database: Tabel 'assets' (Supabase)")]
+
+    ATOMIC_LOCK --> CHECK_AVAIL{"Decision: Status Aset == 'available'?"}
+    CHECK_AVAIL -- "Tidak (Aset Telah Dipinjam / Konflik)" --> RESP_CONFLICT[/"Display HP: HTTP 409 Conflict ('Barang Baru Saja Dipinjam')" /]
+    RESP_CONFLICT --> END_FAIL
+
+    CHECK_AVAIL -- "Ya (Aset Tersedia)" --> EXEC_BORROW["Proses Server: Update Status Aset -> 'borrowed' & Insert Transaksi"]
+    EXEC_BORROW --> DB_ASSETS
+    EXEC_BORROW --> DB_TX[("Database: Tabel 'transactions' (Supabase)")]
+    EXEC_BORROW --> RESP_BORROW_OK[/"Display HP: HTTP 200 OK (Bukti Digital Peminjaman Berhasil)"/]
+    RESP_BORROW_OK --> REFRESH_KIOSK["Proses: Real-time Update Status Aset di Layar Kiosk"]
+    REFRESH_KIOSK -.-> DISP_QR
+    RESP_BORROW_OK --> END_SUCCESS(["Sesi Peminjaman Sukses"])
+
+    %% ─────────────────────────────────────────────────────────────
+    %% SUB-SISTEM 4: ALUR PENGEMBALIAN MANDIRI (RETURN TRANSACTION)
+    %% ─────────────────────────────────────────────────────────────
+    MENU_SELECT -- "Pilih Aksi Kembali" --> FORM_RETURN[/"Manual Input HP: Input NPM Peminjam / Scan Barcode Aset"/]
+    FORM_RETURN --> SUBMIT_RETURN["Proses: Kirim Payload HTTP POST /api/return"]
+
+    SUBMIT_RETURN --> QUERY_TX["Proses Server: Cari Riwayat Transaksi Aktif"]
+    QUERY_TX <--> DB_TX
+
+    QUERY_TX --> CHECK_TX{"Decision: Transaksi Aktif Terdaftar atas NPM Tersebut?"}
+    CHECK_TX -- "Data Tidak Ditemukan" --> ERR_TX[/"Display HP: HTTP 404 ('Data Peminjaman Tidak Ditemukan')" /]
+    ERR_TX --> END_FAIL
+
+    CHECK_TX -- "Transaksi Valid" --> CLOSE_TX["Proses Server: Update Status Aset -> 'available' & Catat return_time"]
+    CLOSE_TX --> DB_ASSETS
+    CLOSE_TX --> DB_TX
+    CLOSE_TX --> RESP_RET_OK[/"Display HP: HTTP 200 OK (Bukti Digital Pengembalian Sukses)"/]
+    RESP_RET_OK --> REFRESH_KIOSK_RET["Proses: Real-time Update Status Aset di Layar Kiosk"]
+    REFRESH_KIOSK_RET -.-> DISP_QR
+    RESP_RET_OK --> END_SUCCESS_RET(["Sesi Pengembalian Sukses"])
