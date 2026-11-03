@@ -93,22 +93,22 @@ flowchart LR
     L --> UC19
 
     %% ─────────────────────────────────────────────────────────────
-    %% RELASI <<INCLUDE>> (KEHARUSAN EKSEKUSI)
+    %% RELASI «INCLUDE» (KEHARUSAN EKSEKUSI)
     %% ─────────────────────────────────────────────────────────────
-    UC3 -.->|"<<include>>"| UC4
-    UC6 -.->|"<<include>>"| UC4
-    UC6 -.->|"<<include>>"| UC7
-    UC6 -.->|"<<include>>"| UC8
+    UC3 -.->|"«include»"| UC4
+    UC6 -.->|"«include»"| UC4
+    UC6 -.->|"«include»"| UC7
+    UC6 -.->|"«include»"| UC8
 
-    UC10 -.->|"<<include>>"| UC4
-    UC10 -.->|"<<include>>"| UC11
-    UC10 -.->|"<<include>>"| UC12
+    UC10 -.->|"«include»"| UC4
+    UC10 -.->|"«include»"| UC11
+    UC10 -.->|"«include»"| UC12
 
     %% ─────────────────────────────────────────────────────────────
-    %% RELASI <<EXTEND>> (PERCABANGAN KONDISIONAL / HASIL)
+    %% RELASI «EXTEND» (PERCABANGAN KONDISIONAL / HASIL)
     %% ─────────────────────────────────────────────────────────────
-    UC9 -.->|"<<extend>>"| UC6
-    UC13 -.->|"<<extend>>"| UC10
+    UC9 -.->|"«extend»"| UC6
+    UC13 -.->|"«extend»"| UC10
 ```
 
 ---
