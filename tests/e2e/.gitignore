@@ -1,0 +1,18 @@
+# Python virtual environment
+.venv/
+venv/
+
+# Python bytecode cache
+__pycache__/
+*.py[cod]
+
+# Pytest cache
+.pytest_cache/
+
+# Execution artifacts (logs & reports are exported to @../reports)
+results/
+*.log
+
+# Local environment overrides (secrets never belong in git)
+.env
+.env.local

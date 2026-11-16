@@ -1,0 +1,7 @@
+# Lentera E2E Test Suite — Dependencies
+# Installed via: uv pip install -r requirements.txt
+# Assertions reference: @../../audit/specs/validation_rules.md
+
+selenium>=4.27
+pytest>=8.3
+requests>=2.32
