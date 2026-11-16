@@ -1,0 +1,57 @@
+================================================================================
+LENTERA E2E TEST SUITE - HASIL EKSEKUSI
+================================================================================
+Tanggal Eksekusi : 2026-11-16 21.40.17
+Branch           : qa/ppl-audit
+Commit           : b14d3a2
+Standar          : ISO/IEC/IEEE 29119 / IEEE 829
+Lingkungan       : Next.js 16 dev server (lokal) + Microsoft Edge (Selenium 4)
+Python           : 3.14.7 / pytest 9.2.0 / selenium 4.52.0
+Acuan Assertion  : audit/specs/validation_rules.md
+Sifat Pengujian  : Negatif / Guard / BVA - TANPA mutasi data
+Command          : python -m pytest -v --tb=short --junitxml=results/junit.xml
+================================================================================
+============================= test session starts =============================
+platform win32 -- Python 3.14.7, pytest-9.2.0, pluggy-1.7.0 -- \\wsl.localhost\Ubuntu-22.04\home\rannd1nt\College\Semester_5\PengujianPerangkatLunak\lentera\tests\e2e\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: \\wsl.localhost\Ubuntu-22.04\home\rannd1nt\College\Semester_5\PengujianPerangkatLunak\lentera\tests\e2e
+configfile: pytest.ini
+testpaths: .
+collecting ... collected 25 items
+
+test_access_guards.py::TestDirectUrlGuards::test_borrow_form_rejects_access_without_token PASSED [  4%]
+test_access_guards.py::TestDirectUrlGuards::test_return_form_rejects_access_without_token PASSED [  8%]
+test_access_guards.py::TestDirectUrlGuards::test_borrow_form_rejects_garbage_token PASSED [ 12%]
+test_access_guards.py::TestDirectUrlGuards::test_scan_page_without_token_shows_error XFAILnya. State `loading` diinisialisasi `!qrToken` (true)
+dan useEffect melakukan early-return tanpa pernah mengubahnya, sehingga
+cabang `error` tidak pernah dirender. Pesan 'Token QR tidak ditemukan'
+ada di state tapi tak terlihat. Lihat test pembanding di bawah untuk
+bukti perilaku aktual.)                                                  [ 16%]
+test_access_guards.py::TestDirectUrlGuards::test_scan_page_actual_behaviour_is_infinite_spinner PASSED [ 20%]
+test_access_guards.py::TestFormStructure::test_borrow_form_declares_all_spec_fields PASSED [ 24%]
+test_access_guards.py::TestFormStructure::test_borrow_form_npm_input_has_no_format_restriction PASSED [ 28%]
+test_api_contracts.py::TestGatewayValidateContract::test_validate_without_token_returns_400 PASSED [ 32%]
+test_api_contracts.py::TestGatewayValidateContract::test_validate_with_malformed_token_returns_401 PASSED [ 36%]
+test_api_contracts.py::TestTokenForgeryResistance::test_borrow_rejects_invalid_token[expired] PASSED [ 40%]
+test_api_contracts.py::TestTokenForgeryResistance::test_borrow_rejects_invalid_token[tampered-signature] PASSED [ 44%]
+test_api_contracts.py::TestTokenForgeryResistance::test_borrow_rejects_invalid_token[wrong-type] PASSED [ 48%]
+test_api_contracts.py::TestTokenForgeryResistance::test_borrow_rejects_invalid_token[wrong-secret] PASSED [ 52%]
+test_api_contracts.py::TestTokenForgeryResistance::test_borrow_rejects_invalid_token[malformed] PASSED [ 56%]
+test_api_contracts.py::TestTokenForgeryResistance::test_expired_token_is_rejected_without_waiting PASSED [ 60%]
+test_api_contracts.py::TestFieldCompleteness::test_missing_required_field_returns_400[asset_code] PASSED [ 64%]
+test_api_contracts.py::TestFieldCompleteness::test_missing_required_field_returns_400[student_name] PASSED [ 68%]
+test_api_contracts.py::TestFieldCompleteness::test_missing_required_field_returns_400[student_npm] PASSED [ 72%]
+test_api_contracts.py::TestNpmBoundaryValueAnalysis::test_npm_partition_is_not_rejected[min-1  (10 digit)-1234567890-False] PASSED [ 76%]
+test_api_contracts.py::TestNpmBoundaryValueAnalysis::test_npm_partition_is_not_rejected[valid  (11 digit)-24903460014-True] PASSED [ 80%]
+test_api_contracts.py::TestNpmBoundaryValueAnalysis::test_npm_partition_is_not_rejected[max+1  (12 digit)-123456789012-False] PASSED [ 84%]
+test_api_contracts.py::TestNpmBoundaryValueAnalysis::test_npm_partition_is_not_rejected[huruf  (alfabet)-ABC12345678-False] PASSED [ 88%]
+test_api_contracts.py::TestNpmBoundaryValueAnalysis::test_npm_partition_is_not_rejected[terlalu pendek-12345-False] PASSED [ 92%]
+test_api_contracts.py::TestNpmBoundaryValueAnalysis::test_npm_partition_is_not_rejected[karakter spesial-249034600!4-False] PASSED [ 96%]
+test_api_contracts.py::test_npm_error_message_specified_by_spec_is_absent PASSED [100%]
+
+- generated xml file: \\wsl.localhost\Ubuntu-22.04\home\rannd1nt\College\Semester_5\PengujianPerangkatLunak\lentera\tests\e2e\results\junit.xml -
+=========================== short test summary info ===========================
+XFAIL test_access_guards.py::TestDirectUrlGuards::test_scan_page_without_token_shows_error - BUG-SCAN-001: /scan tanpa parameter `token` nyangkut di spinner selamanya. State `loading` diinisialisasi `!qrToken` (true) dan useEffect melakukan early-return tanpa pernah mengubahnya, sehingga cabang `error` tidak pernah dirender. Pesan 'Token QR tidak ditemukan' ada di state tapi tak terlihat. Lihat test pembanding di bawah untuk bukti perilaku aktual.
+================== 24 passed, 1 xfailed in 108.81s (0:01:48) ==================
+
+EXIT CODE: 0
